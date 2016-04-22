@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">APIConsumer</string>
+    <string name="POST_CAR">POST CAR</string>
+    <string name="POST_OWNER">POST OWNER</string>
+    <string name="PUT_OWNER">PUT OWNER</string>
+    <string name="PUT_CAR">PUT CAR</string>
+</resources>

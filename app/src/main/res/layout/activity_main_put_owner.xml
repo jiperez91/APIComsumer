@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#9b8c8c"
+    android:weightSum="1">
+
+    <EditText
+        android:id="@+id/etJson"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:layout_weight="0.88" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Name:"
+            android:layout_alignBaseline="@+id/etName"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/etLastName"
+            android:layout_alignStart="@+id/etLastName" />
+
+        <TextView
+            android:id="@+id/tvLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:text="Last Name:"
+            android:layout_alignBaseline="@+id/etLastName"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etLastName"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvLastName"
+            android:layout_below="@+id/etName"/>
+
+        <TextView
+            android:id="@+id/tvDNI"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLastName"
+            android:text="DNI:"
+            android:layout_alignBaseline="@+id/etDNI"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etDNI"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etLastName"
+            android:layout_alignLeft="@+id/etNationality"
+            android:layout_alignStart="@+id/etNationality" />
+
+        <TextView
+            android:id="@+id/tvNationality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDNI"
+            android:text="Nationality:"
+            android:layout_alignBaseline="@+id/etNationality"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etNationality"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvNationality"
+            android:layout_below="@+id/etDNI"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView4"
+            android:src="@drawable/owner"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="-10dp"
+            android:layout_alignBottom="@+id/tvNationality"
+            android:layout_toRightOf="@+id/etName"
+            android:layout_toEndOf="@+id/etName" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnPost"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/PUT_OWNER"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:layout_marginTop="15dp" />
+
+</LinearLayout>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#9b8c8c">
+
+    <EditText
+        android:id="@+id/etJson"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:layout_weight="0.88" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/tvMake"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="Make:"
+            android:layout_alignBaseline="@+id/etMake"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etMake"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvMake"
+            android:layout_marginLeft="3dp" />
+
+        <TextView
+            android:id="@+id/tvModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvMake"
+            android:text="Model:"
+            android:layout_alignBaseline="@+id/etModel"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etModel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etMake"
+            android:layout_alignLeft="@+id/etMake"
+            android:layout_alignStart="@+id/etMake" />
+
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvModel"
+            android:text="Year:"
+            android:layout_alignBaseline="@+id/etYear"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etYear"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etModel"
+            android:layout_alignLeft="@+id/etModel"
+            android:layout_alignStart="@+id/etModel" />
+
+        <TextView
+            android:id="@+id/tvPlate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvYear"
+            android:text="Plate:"
+            android:layout_alignBaseline="@+id/etPlate"
+            android:textStyle="bold"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:id="@+id/etPlate"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etYear"
+            android:layout_alignLeft="@+id/etYear"
+            android:layout_alignStart="@+id/etYear" />
+
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/PUT_CAR"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:layout_below="@+id/etPlate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView5"
+            android:src="@drawable/car"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/etPlate"
+            android:layout_marginRight="-5dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="-1dp"
+            android:layout_toRightOf="@+id/etMake"
+            android:layout_toEndOf="@+id/etMake" />
+
+    </RelativeLayout>
+</LinearLayout>
