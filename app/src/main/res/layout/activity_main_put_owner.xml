@@ -12,7 +12,8 @@
         android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:focusable="false"
-        android:layout_weight="0.88" />
+        android:layout_weight="0.88"
+        android:textStyle="bold|normal|italic" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -92,13 +93,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView4"
             android:src="@drawable/owner"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="-10dp"
-            android:layout_alignBottom="@+id/tvNationality"
-            android:layout_toRightOf="@+id/etName"
-            android:layout_toEndOf="@+id/etName" />
+            android:layout_alignBottom="@+id/tvDNI"
+            android:layout_toRightOf="@+id/etDNI"
+            android:layout_toEndOf="@+id/etDNI"
+            android:layout_alignTop="@+id/tvLastName" />
 
     </RelativeLayout>
 

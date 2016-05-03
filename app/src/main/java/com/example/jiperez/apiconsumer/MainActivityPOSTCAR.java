@@ -4,20 +4,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 @SuppressWarnings("ALL")
@@ -26,6 +34,7 @@ public class MainActivityPOSTCAR extends MainActivity {
     EditText etMake, etModel, etYear, etPlate;
     Button btnPost;
     Car car;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +46,12 @@ public class MainActivityPOSTCAR extends MainActivity {
         etYear = (EditText) findViewById(R.id.etYear);
         etPlate = (EditText) findViewById(R.id.etPlate);
         btnPost = (Button) findViewById(R.id.btnPost);
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+        new HttpAsyncGet().execute("http://192.168.1.112:8080/cars/apiOwner");
     }
 
-    public static String POST(String url, Car car) {
+    public static String POST(String url, Car car, Long spinner_id) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -57,7 +69,7 @@ public class MainActivityPOSTCAR extends MainActivity {
             jsonObject.accumulate("model", car.getModel());
             jsonObject.accumulate("year", car.getYear());
             jsonObject.accumulate("plate", car.getPlate());
-            jsonObject.accumulate("owner", 1);
+            jsonObject.accumulate("owner", spinner_id + 1);
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -137,13 +149,61 @@ public class MainActivityPOSTCAR extends MainActivity {
             car.setYear(etYear.getText().toString());
             car.setPlate(etPlate.getText().toString());
 
-            return POST(urls[0], car);
+            return POST(urls[0], car, spinner.getSelectedItemId());
         }
 
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Posted!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String GET(String url){
+        InputStream inputStream = null;
+        String result = "";
+        try {
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+        return result;
+    }
+
+    private class HttpAsyncGet extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                String[] valores = new String[length];
+                for (int i = 0; i < length; i++) {
+                    JSONObject owner = jsonArray.getJSONObject(i);
+                    valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
+                }
+                spinner.setAdapter(new ArrayAdapter<String>(MainActivityPOSTCAR.this, android.R.layout.simple_spinner_item, valores));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

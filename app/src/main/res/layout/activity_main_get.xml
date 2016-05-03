@@ -4,13 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/etResponse"
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:focusable="false"
+        android:id="@+id/listView"
         android:background="#9b8c8c" />
-
 </LinearLayout>

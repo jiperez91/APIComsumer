@@ -4,8 +4,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -30,6 +32,7 @@ public class MainActivityPUTCAR extends MainActivity {
     EditText etJson, etMake, etModel, etYear, etPlate;
     Button btnPost;
     Car car;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,13 @@ public class MainActivityPUTCAR extends MainActivity {
         etYear = (EditText) findViewById(R.id.etYear);
         etPlate = (EditText) findViewById(R.id.etPlate);
         btnPost = (Button) findViewById(R.id.btnPost);
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         Bundle bundle = getIntent().getExtras();
         String url = bundle.getString("url");
 
         new RetrieveSiteData().execute(url);
+        new RetrieveSiteData2().execute("http://192.168.1.112:8080/cars/apiOwner");
     }
 
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
@@ -59,7 +64,7 @@ public class MainActivityPUTCAR extends MainActivity {
         return result;
     }
 
-    public static String PUT(String url, Car car) {
+    public static String PUT(String url, Car car, Long spinner_id) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -77,7 +82,7 @@ public class MainActivityPUTCAR extends MainActivity {
             jsonObject.accumulate("model", car.getModel());
             jsonObject.accumulate("year", car.getYear());
             jsonObject.accumulate("plate", car.getPlate());
-            jsonObject.accumulate("owner", 1);
+            jsonObject.accumulate("owner", spinner_id + 1);
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -173,13 +178,33 @@ public class MainActivityPUTCAR extends MainActivity {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                Iterator x = jsonObject.keys();
-                JSONArray jsonArray = new JSONArray();
-                while (x.hasNext()) {
-                    String key = (String) x.next();
-                    jsonArray.put(jsonObject.get(key));
+                String aux = jsonObject.getString("owner");
+                JSONObject jsonObject2 = new JSONObject(aux);
+                String aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
+                etJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class RetrieveSiteData2 extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                String[] valores = new String[length];
+                for (int i = 0; i < length; i++) {
+                    JSONObject owner = jsonArray.getJSONObject(i);
+                    valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
                 }
-                etJson.setText(jsonArray.toString(1));
+                spinner.setAdapter(new ArrayAdapter<String>(MainActivityPUTCAR.this, android.R.layout.simple_spinner_item, valores));
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -195,7 +220,7 @@ public class MainActivityPUTCAR extends MainActivity {
             car.setYear(etYear.getText().toString());
             car.setPlate(etPlate.getText().toString());
 
-            return PUT(urls[0], car);
+            return PUT(urls[0], car, spinner.getSelectedItemId());
         }
 
         // onPostExecute displays the results of the AsyncTask.

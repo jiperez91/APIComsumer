@@ -1,28 +1,18 @@
 package com.example.jiperez.apiconsumer;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 
 @SuppressWarnings("ALL")
 public class MainActivity extends AppCompatActivity {
-
     EditText editurl;
 
     @Override
@@ -32,14 +22,55 @@ public class MainActivity extends AppCompatActivity {
         editurl = (EditText) findViewById(R.id.editText);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                Intent intent = new Intent(this, About.class);
+                startActivity(intent);
+                break;
+            case R.id.exit:
+                this.finishAffinity();
+                break;
+        }
+        return true;
+    }
+
     public void getexe(View view) {
-        if(editurl.getText().toString().isEmpty()){
+        String url = editurl.getText().toString();
+        if(url.isEmpty()){
             Toast.makeText(getBaseContext(), "Enter URL!", Toast.LENGTH_LONG).show();
         }
         else {
-            Intent i = new Intent(this, MainActivityGET.class);
-            i.putExtra("url", editurl.getText().toString());
-            startActivity(i);
+            int index = url.indexOf("/", 31);
+            if(url.contains("Owner") && index != -1){
+                String own = "one owner";
+                Intent intent = new Intent(this, DetailsOWNER.class);
+                intent.putExtra("own", own);
+                intent.putExtra("url", url);
+                startActivity(intent);
+            }
+            else{
+                if(!url.contains("Owner") && index != -1) {
+                    String car = "one car";
+                    Intent intent = new Intent(this, DetailsCAR.class);
+                    intent.putExtra("car", car);
+                    intent.putExtra("url", url);
+                    startActivity(intent);
+                }
+                else {
+                    Intent i = new Intent(this, MainActivityGET.class);
+                    i.putExtra("url", url);
+                    startActivity(i);
+                }
+            }
         }
     }
 
@@ -53,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             if(url.contains("Owner")){
                 if(index == -1) {
                     Intent i = new Intent(this, MainActivityPOSTOWNER.class);
-                    i.putExtra("url", editurl.getText().toString());
+                    i.putExtra("url", url);
                     startActivity(i);
                 }
                 else {
@@ -63,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             else {
                 if(index == -1) {
                     Intent i = new Intent(this, MainActivityPOSTCAR.class);
-                    i.putExtra("url", editurl.getText().toString());
+                    i.putExtra("url", url);
                     startActivity(i);
                 }
                 else {
@@ -81,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
         else {
             int index = url.indexOf("/",31);
             if(index != -1){
-                new HttpAsyncTask().execute(url);
+                Intent i = new Intent(this, MainActivityDELETE.class);
+                i.putExtra("url", url);
+                startActivity(i);
             }
             else {
                 Toast.makeText(getBaseContext(), "Enter an ID in the URL!", Toast.LENGTH_LONG).show();
@@ -99,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             if(url.contains("Owner")){
                 if(index != -1){
                     Intent i = new Intent(this, MainActivityPUTOWNER.class);
-                    i.putExtra("url", editurl.getText().toString());
+                    i.putExtra("url", url);
                     startActivity(i);
                 }
                 else {
@@ -109,70 +142,13 @@ public class MainActivity extends AppCompatActivity {
             else {
                 if(index != -1){
                     Intent i = new Intent(this, MainActivityPUTCAR.class);
-                    i.putExtra("url", editurl.getText().toString());
+                    i.putExtra("url", url);
                     startActivity(i);
                 }
                 else {
                     Toast.makeText(getBaseContext(), "Enter an ID in the URL!", Toast.LENGTH_LONG).show();
                 }
             }
-        }
-    }
-
-    public static String DELETE(String url) {
-        InputStream inputStream = null;
-        String result = "";
-        try {
-            // 1. create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // 2. make DELETE request to the given URL
-            HttpDelete httpDelete = new HttpDelete(url);
-
-            // 3. Set some headers to inform server about the type of the content
-            httpDelete.setHeader("Accept", "application/json");
-            httpDelete.setHeader("Content-type", "application/json");
-
-            // 4. Execute POST request to the given URL
-            HttpResponse httpResponse = httpclient.execute(httpDelete);
-
-            // 5. receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // 6. convert inputstream to string
-            if(inputStream != null)
-                result = convertInputStreamToString(inputStream);
-            else
-                result = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        // 7. return result
-        return result;
-    }
-
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while((line = bufferedReader.readLine()) != null)
-            result += line;
-        inputStream.close();
-        return result;
-    }
-
-    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            return DELETE(urls[0]);
-        }
-
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Deleted!", Toast.LENGTH_LONG).show();
         }
     }
 }

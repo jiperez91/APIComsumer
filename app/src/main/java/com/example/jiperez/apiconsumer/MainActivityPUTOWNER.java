@@ -190,13 +190,7 @@ public class MainActivityPUTOWNER extends MainActivity {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                Iterator x = jsonObject.keys();
-                JSONArray jsonArray = new JSONArray();
-                while (x.hasNext()) {
-                    String key = (String) x.next();
-                    jsonArray.put(jsonObject.get(key));
-                }
-                etJson.setText(jsonArray.toString(1));
+                etJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
             } catch (JSONException e){
                 e.printStackTrace();
             }

@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
-
-//robotspice
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -15,24 +14,28 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 @SuppressWarnings("ALL")
 public class MainActivityGET extends MainActivity {
 
-    EditText etResponse;
+    ListView lsvw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_get);
 
-        etResponse = (EditText) findViewById(R.id.etResponse);
+        lsvw = (ListView) findViewById(R.id.listView);
 
         Bundle bundle = getIntent().getExtras();
         String url = bundle.getString("url");
@@ -83,26 +86,65 @@ public class MainActivityGET extends MainActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-            try {
-                Object json = new JSONTokener(result).nextValue();
-                if (json instanceof JSONArray){
-                    JSONArray jsonArray = new JSONArray(result);
-                    etResponse.setText(jsonArray.toString(1));
-                }
-                else if (json instanceof JSONObject){
-                    JSONObject jsonObject = new JSONObject(result);
-                    Iterator x = jsonObject.keys();
-                    JSONArray jsonArray = new JSONArray();
-
-                    while (x.hasNext()) {
-                        String key = (String) x.next();
-                        jsonArray.put(jsonObject.get(key));
+            Bundle bundle = getIntent().getExtras();
+            String url = bundle.getString("url");
+            if(url.contains("Owner")){
+                try {
+                    Toast.makeText(getBaseContext(), "Owners!", Toast.LENGTH_LONG).show();
+                    final JSONArray jsonArray = new JSONArray(result);
+                    int length = jsonArray.length();
+                    List<String> listContents = new ArrayList<String>(length);
+                    for (int i = 0; i < length; i++) {
+                        JSONObject owner = jsonArray.getJSONObject(i);
+                        listContents.add("ID " + owner.getString("id") + " - " + owner.getString("nombre") + " " + owner.getString("apellido"));
                     }
-                    etResponse.setText(jsonArray.toString(1));
+                    lsvw.setAdapter(new ArrayAdapter<String>(MainActivityGET.this, android.R.layout.simple_list_item_1, listContents));
+
+                    lsvw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(MainActivityGET.this, DetailsOWNER.class);
+                            try {
+                                JSONObject owner = jsonArray.getJSONObject(position);
+                                intent.putExtra("id", owner.getString("id"));
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (JSONException e){
+                    e.printStackTrace();
                 }
-            } catch (JSONException e){
-                e.printStackTrace();
+            }
+            else {
+                try {
+                    Toast.makeText(getBaseContext(), "Cars!", Toast.LENGTH_LONG).show();
+                    final JSONArray jsonArray = new JSONArray(result);
+                    int length = jsonArray.length();
+                    List<String> listContents = new ArrayList<String>(length);
+                    for (int i = 0; i < length; i++) {
+                        JSONObject car = jsonArray.getJSONObject(i);
+                        listContents.add("ID " + car.getString("id") + " - " + car.getString("make") + " " + car.getString("model"));
+                    }
+                    lsvw.setAdapter(new ArrayAdapter<String>(MainActivityGET.this, android.R.layout.simple_list_item_1, listContents));
+
+                    lsvw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Intent intent = new Intent(MainActivityGET.this, DetailsCAR.class);
+                            try {
+                                JSONObject car = jsonArray.getJSONObject(position);
+                                intent.putExtra("id", car.getString("id"));
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
         }
     }
