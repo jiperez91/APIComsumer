@@ -5,14 +5,16 @@
     android:orientation="vertical"
     android:background="#9b8c8c">
 
-    <EditText
-        android:id="@+id/etJson"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvJson"
+        android:layout_width="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_height="90dp"
         android:layout_alignParentTop="true"
-        android:focusable="false"
         android:layout_weight="0.10"
-        android:textStyle="bold|normal|italic" />
+        android:textStyle="bold|normal|italic"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"

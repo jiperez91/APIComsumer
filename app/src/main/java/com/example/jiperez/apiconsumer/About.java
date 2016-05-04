@@ -1,6 +1,5 @@
 package com.example.jiperez.apiconsumer;
 
-
 import android.os.Bundle;
 
 public class About extends MainActivity {

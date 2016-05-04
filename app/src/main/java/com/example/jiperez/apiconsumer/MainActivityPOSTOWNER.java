@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 @SuppressWarnings("ALL")
 public class MainActivityPOSTOWNER extends MainActivity {
-
     EditText etName, etLastName, etDNI, etNationality;
     Button btnPost;
     Owner owner;

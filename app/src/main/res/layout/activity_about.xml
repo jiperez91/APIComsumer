@@ -26,7 +26,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Copyright (c) 2016 Juan Ignacio Perez"
+        android:text="@string/about_author"
         android:layout_gravity="center"
         android:textStyle="bold|italic"
         android:textSize="20dp"

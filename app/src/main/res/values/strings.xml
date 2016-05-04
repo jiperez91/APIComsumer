@@ -4,6 +4,6 @@
     <string name="POST_OWNER">POST OWNER</string>
     <string name="PUT_OWNER">PUT OWNER</string>
     <string name="PUT_CAR">PUT CAR</string>
-    <string name="about_author">Juan Ignacio Perez</string>
+    <string name="about_author">Copyright © 2016 Juan Ignacio Perez</string>
     <string name="app_description">APIConsumer is an android application made for consuming web services from a grails project called Cars.</string>
 </resources>

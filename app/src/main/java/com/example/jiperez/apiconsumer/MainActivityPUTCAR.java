@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -28,8 +29,8 @@ import java.util.Iterator;
 
 @SuppressWarnings("ALL")
 public class MainActivityPUTCAR extends MainActivity {
-
-    EditText etJson, etMake, etModel, etYear, etPlate;
+    EditText etMake, etModel, etYear, etPlate;
+    TextView tvJson;
     Button btnPost;
     Car car;
     Spinner spinner;
@@ -39,7 +40,7 @@ public class MainActivityPUTCAR extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_put_car);
 
-        etJson = (EditText) findViewById(R.id.etJson);
+        tvJson = (TextView) findViewById(R.id.tvJson);
         etMake = (EditText) findViewById(R.id.etMake);
         etModel = (EditText) findViewById(R.id.etModel);
         etYear = (EditText) findViewById(R.id.etYear);
@@ -181,7 +182,7 @@ public class MainActivityPUTCAR extends MainActivity {
                 String aux = jsonObject.getString("owner");
                 JSONObject jsonObject2 = new JSONObject(aux);
                 String aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
-                etJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+                tvJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
             } catch (JSONException e){
                 e.printStackTrace();
             }

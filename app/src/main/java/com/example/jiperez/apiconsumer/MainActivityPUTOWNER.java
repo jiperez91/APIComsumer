@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -26,7 +27,8 @@ import java.util.Iterator;
 
 @SuppressWarnings("ALL")
 public class MainActivityPUTOWNER extends MainActivity {
-    EditText etJson, etName, etLastName, etDNI, etNationality;
+    EditText etName, etLastName, etDNI, etNationality;
+    TextView tvJson;
     Button btnPost;
     Owner owner;
     private static final String TAG = "LOGGED:::MainActivity";
@@ -36,7 +38,7 @@ public class MainActivityPUTOWNER extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_put_owner);
 
-        etJson = (EditText) findViewById(R.id.etJson);
+        tvJson = (TextView) findViewById(R.id.tvJson);
         etName = (EditText) findViewById(R.id.etName);
         etLastName = (EditText) findViewById(R.id.etLastName);
         etDNI = (EditText) findViewById(R.id.etDNI);
@@ -190,7 +192,7 @@ public class MainActivityPUTOWNER extends MainActivity {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             try {
                 JSONObject jsonObject = new JSONObject(result);
-                etJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
+                tvJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
             } catch (JSONException e){
                 e.printStackTrace();
             }

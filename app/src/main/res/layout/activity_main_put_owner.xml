@@ -6,18 +6,21 @@
     android:background="#9b8c8c"
     android:weightSum="1">
 
-    <EditText
-        android:id="@+id/etJson"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
+    <TextView
+        android:id="@+id/tvJson"
+        android:layout_width="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="226dp"
         android:layout_alignParentTop="true"
-        android:focusable="false"
-        android:layout_weight="0.88"
-        android:textStyle="bold|normal|italic" />
+        android:layout_weight="0.10"
+        android:textStyle="bold|normal|italic"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/tvName"
@@ -108,6 +111,8 @@
         android:text="@string/PUT_OWNER"
         android:clickable="true"
         android:onClick="onClick"
+        android:layout_below="@+id/etNationality"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp" />
 
 </LinearLayout>

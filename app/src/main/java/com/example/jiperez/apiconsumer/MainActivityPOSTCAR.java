@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 @SuppressWarnings("ALL")
 public class MainActivityPOSTCAR extends MainActivity {
-
     EditText etMake, etModel, etYear, etPlate;
     Button btnPost;
     Car car;

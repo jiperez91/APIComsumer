@@ -1,6 +1,7 @@
 package com.example.jiperez.apiconsumer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 
 @SuppressWarnings("ALL")
 public class MainActivity extends AppCompatActivity {

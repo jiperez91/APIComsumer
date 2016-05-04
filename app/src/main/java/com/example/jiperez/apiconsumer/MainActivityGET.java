@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 @SuppressWarnings("ALL")
 public class MainActivityGET extends MainActivity {
-
     ListView lsvw;
 
     @Override

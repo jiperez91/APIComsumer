@@ -5,42 +5,44 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:label="@string/app_name">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityGET">
+        <activity android:name=".MainActivityGET"
+            android:label="GET">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityPOSTOWNER">
+        <activity android:name=".MainActivityPOSTOWNER"
+            android:label="POST OWNER">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityPOSTCAR">
+        <activity android:name=".MainActivityPOSTCAR"
+            android:label="POST CAR">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityPUTOWNER">
+        <activity android:name=".MainActivityPUTOWNER"
+            android:label="PUT OWNER">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivityPUTCAR">
+        <activity android:name=".MainActivityPUTCAR"
+            android:label="PUT CAR">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -50,21 +52,23 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsOWNER">
+        <activity android:name=".DetailsOWNER"
+            android:label="OWNER INFORMATION">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsCAR">
+        <activity android:name=".DetailsCAR"
+            android:label="CAR INFORMATION">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".About">
+        <activity android:name=".About"
+            android:label="ABOUT">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
