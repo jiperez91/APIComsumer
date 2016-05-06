@@ -96,10 +96,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/imageView4"
             android:src="@drawable/owner"
-            android:layout_alignBottom="@+id/tvDNI"
             android:layout_toRightOf="@+id/etDNI"
-            android:layout_toEndOf="@+id/etDNI"
-            android:layout_alignTop="@+id/tvLastName" />
+            android:layout_alignTop="@+id/tvName"
+            android:layout_alignBottom="@+id/etNationality" />
 
     </RelativeLayout>
 

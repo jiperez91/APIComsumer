@@ -1,8 +1,10 @@
 package com.example.jiperez.apiconsumer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,18 +31,9 @@ public class DetailsCAR extends MainActivity {
         details = (TextView) findViewById(R.id.textdetails);
 
         Bundle bundle = getIntent().getExtras();
-        String car = bundle.getString("car");
-        String url;
-
-        if (!Objects.equals(car, "one car")){
-            String id = bundle.getString("id");
-            url = "http://192.168.1.112:8080/cars/api/" + id;
-            new HttpAsyncTask().execute(url);
-        }
-        else {
-            url = bundle.getString("url");
-            new HttpAsyncTask().execute(url);
-        }
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        new HttpAsyncTask().execute(url);
     }
 
     public static String GET(String url){
@@ -98,4 +91,24 @@ public class DetailsCAR extends MainActivity {
             }
         }
     }
+
+    public void deleteexe(View view) {
+        Bundle bundle = getIntent().getExtras();
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        Intent i = new Intent(this, MainActivityDELETE.class);
+        i.putExtra("url", url);
+        startActivity(i);
+    }
+
+    public void putexe(View view) {
+        Bundle bundle = getIntent().getExtras();
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        Intent i = new Intent(this, MainActivityPUTCAR.class);
+        i.putExtra("url", url);
+        startActivity(i);
+    }
 }
+
+

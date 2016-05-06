@@ -17,9 +17,34 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="325dp"
         android:id="@+id/imageView3"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/owner"
-        android:layout_marginTop="-10dp" />
+        android:src="@drawable/owner" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="DELETE"
+            android:id="@+id/buttondelete"
+            android:onClick="deleteexe"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/buttondelete"
+            android:text="PUT"
+            android:id="@+id/buttonput"
+            android:onClick="putexe"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="right"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
 </LinearLayout>

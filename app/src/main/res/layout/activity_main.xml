@@ -6,32 +6,14 @@
     android:background="#9b8c8c"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="URL:"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:textSize="30dp"
-        android:layout_gravity="center_horizontal" />
-
-    <EditText
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:editable="true"
-        android:hint="Enter URL"
-        android:textSize="15dp"
-        android:text="http://192.168.1.112:8080/cars/api"
-        android:layout_marginLeft="17dp"
-        android:layout_marginRight="17dp" />
-
+        android:textSize="20sp"
+        android:popupBackground="#9b8c8c"
+        android:layout_marginRight="13dp"
+        android:layout_marginLeft="37dp" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -51,9 +33,7 @@
             android:id="@+id/buttonget"
             android:onClick="getexe"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/buttondelete"
-            android:layout_alignEnd="@+id/buttondelete" />
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="150dp"
@@ -65,30 +45,11 @@
             android:layout_alignParentEnd="true"
             android:onClick="postexe" />
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="DELETE"
-            android:id="@+id/buttondelete"
-            android:onClick="deleteexe"
-            android:layout_below="@+id/buttonget"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="PUT"
-            android:id="@+id/buttonput"
-            android:layout_alignTop="@+id/buttondelete"
-            android:layout_alignLeft="@+id/buttonpost"
-            android:layout_alignStart="@+id/buttonpost"
-            android:onClick="putexe" />
     </RelativeLayout>
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/imageView"
         android:src="@drawable/lele"
         android:layout_alignParentLeft="true"

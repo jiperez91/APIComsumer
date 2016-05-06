@@ -1,9 +1,11 @@
 package com.example.jiperez.apiconsumer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,17 +33,9 @@ public class DetailsOWNER extends MainActivity {
         details = (TextView) findViewById(R.id.textdetails);
 
         Bundle bundle = getIntent().getExtras();
-        String own = bundle.getString("own");
-        String url;
-        if (!Objects.equals(own, "one owner")){
-            String id = bundle.getString("id");
-            url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
-            new HttpAsyncTask().execute(url);
-        }
-        else {
-            url = bundle.getString("url");
-            new HttpAsyncTask().execute(url);
-        }
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+        new HttpAsyncTask().execute(url);
     }
 
     public static String GET(String url){
@@ -95,5 +89,23 @@ public class DetailsOWNER extends MainActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void deleteexe(View view) {
+        Bundle bundle = getIntent().getExtras();
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+        Intent i = new Intent(this, MainActivityDELETE.class);
+        i.putExtra("url", url);
+        startActivity(i);
+    }
+
+    public void putexe(View view) {
+        Bundle bundle = getIntent().getExtras();
+        String id = bundle.getString("id");
+        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+        Intent i = new Intent(this, MainActivityPUTOWNER.class);
+        i.putExtra("url", url);
+        startActivity(i);
     }
 }

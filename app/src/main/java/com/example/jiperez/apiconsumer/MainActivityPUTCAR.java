@@ -1,5 +1,6 @@
 package com.example.jiperez.apiconsumer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class MainActivityPUTCAR extends MainActivity {
     Button btnPost;
     Car car;
     Spinner spinner;
+    private static String aux2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,11 +149,13 @@ public class MainActivityPUTCAR extends MainActivity {
             case R.id.btnPost:
                 if(!validate())
                     Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                Bundle bundle = getIntent().getExtras();
-                String url = bundle.getString("url");
-                // call AsynTask to perform network operation on separate thread
-                new HttpAsyncTask().execute(url);
-                break;
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    // call AsynTask to perform network operation on separate thread
+                    new HttpAsyncTask().execute(url);
+                    break;
+                }
         }
     }
 
@@ -176,12 +180,11 @@ public class MainActivityPUTCAR extends MainActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 String aux = jsonObject.getString("owner");
                 JSONObject jsonObject2 = new JSONObject(aux);
-                String aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
+                aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
                 tvJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
             } catch (JSONException e){
                 e.printStackTrace();
@@ -199,13 +202,17 @@ public class MainActivityPUTCAR extends MainActivity {
         protected void onPostExecute(String result) {
             try {
                 JSONArray jsonArray = new JSONArray(result);
-                int length = jsonArray.length();
+                int pos = 0, length = jsonArray.length();
                 String[] valores = new String[length];
                 for (int i = 0; i < length; i++) {
                     JSONObject owner = jsonArray.getJSONObject(i);
                     valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
+                    if (valores[i].equals(aux2)){
+                        pos = i;
+                    }
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivityPUTCAR.this, android.R.layout.simple_spinner_item, valores));
+                spinner.setSelection(pos);
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -228,6 +235,8 @@ public class MainActivityPUTCAR extends MainActivity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Updated!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivityPUTCAR.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 }

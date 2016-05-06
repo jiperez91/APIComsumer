@@ -1,21 +1,21 @@
 package com.example.jiperez.apiconsumer;
 
 public class Owner {
-    private String nombre;
-    private String apellido;
+    private String name;
+    private String lastname;
     private String dni;
-    private String nacionalidad;
+    private String nationality;
 
-    public String getNombre() { return nombre; }
+    public String getName() { return name; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getApellido() { return apellido; }
+    public String getLastname() { return lastname; }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getDni() {
@@ -26,11 +26,11 @@ public class Owner {
         this.dni = dni;
     }
 
-    public String getNacionalidad() {
-        return nacionalidad;
+    public String getNationality() {
+        return nationality;
     }
 
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 }

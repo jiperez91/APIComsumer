@@ -12,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,10 +54,10 @@ public class MainActivityPOSTOWNER extends MainActivity {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("nombre", owner.getNombre());
-            jsonObject.accumulate("apellido", owner.getApellido());
+            jsonObject.accumulate("nombre", owner.getName());
+            jsonObject.accumulate("apellido", owner.getLastname());
             jsonObject.accumulate("dni", owner.getDni());
-            jsonObject.accumulate("nacionalidad", owner.getNacionalidad());
+            jsonObject.accumulate("nacionalidad", owner.getNationality());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -106,11 +107,13 @@ public class MainActivityPOSTOWNER extends MainActivity {
             case R.id.btnPost:
                 if(!validate())
                     Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                Bundle bundle = getIntent().getExtras();
-                String url = bundle.getString("url");
-                // call AsynTask to perform network operation on separate thread
-                new HttpAsyncTask().execute(url);
-                break;
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    // call AsynTask to perform network operation on separate thread
+                    new HttpAsyncTask().execute(url);
+                    break;
+                }
         }
     }
 
@@ -131,10 +134,10 @@ public class MainActivityPOSTOWNER extends MainActivity {
         @Override
         protected String doInBackground(String... urls) {
             owner = new Owner();
-            owner.setNombre(etName.getText().toString());
-            owner.setApellido(etLastName.getText().toString());
+            owner.setName(etName.getText().toString());
+            owner.setLastname(etLastName.getText().toString());
             owner.setDni(etDNI.getText().toString());
-            owner.setNacionalidad(etNationality.getText().toString());
+            owner.setNationality(etNationality.getText().toString());
 
             return POST(urls[0], owner);
         }
@@ -143,6 +146,8 @@ public class MainActivityPOSTOWNER extends MainActivity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Posted!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivityPOSTOWNER.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 }

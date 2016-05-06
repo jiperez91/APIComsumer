@@ -1,5 +1,6 @@
 package com.example.jiperez.apiconsumer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +24,8 @@ public class MainActivityDELETE extends MainActivity {
         Bundle bundle = getIntent().getExtras();
         String url = bundle.getString("url");
         new HttpAsyncTask().execute(url);
-        editurl.setText(url);
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
     public static String DELETE(String url) {

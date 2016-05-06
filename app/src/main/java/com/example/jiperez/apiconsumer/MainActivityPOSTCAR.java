@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -118,11 +119,13 @@ public class MainActivityPOSTCAR extends MainActivity {
             case R.id.btnPost:
                 if(!validate())
                     Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                Bundle bundle = getIntent().getExtras();
-                String url = bundle.getString("url");
-                // call AsynTask to perform network operation on separate thread
-                new HttpAsyncTask().execute(url);
-                break;
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    // call AsynTask to perform network operation on separate thread
+                    new HttpAsyncTask().execute(url);
+                    break;
+                }
         }
     }
 
@@ -155,6 +158,8 @@ public class MainActivityPOSTCAR extends MainActivity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Posted!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivityPOSTCAR.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.jiperez.apiconsumer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Iterator;
 
 @SuppressWarnings("ALL")
 public class MainActivityPUTOWNER extends MainActivity {
@@ -65,10 +64,10 @@ public class MainActivityPUTOWNER extends MainActivity {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("nombre", owner.getNombre());
-            jsonObject.accumulate("apellido", owner.getApellido());
+            jsonObject.accumulate("nombre", owner.getName());
+            jsonObject.accumulate("apellido", owner.getLastname());
             jsonObject.accumulate("dni", owner.getDni());
-            jsonObject.accumulate("nacionalidad", owner.getNacionalidad());
+            jsonObject.accumulate("nacionalidad", owner.getNationality());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -117,11 +116,13 @@ public class MainActivityPUTOWNER extends MainActivity {
             case R.id.btnPost:
                 if(!validate())
                     Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                Bundle bundle = getIntent().getExtras();
-                String url = bundle.getString("url");
-                // call AsynTask to perform network operation on separate thread
-                new HttpAsyncTask().execute(url);
-                break;
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    // call AsynTask to perform network operation on separate thread
+                    new HttpAsyncTask().execute(url);
+                    break;
+                }
         }
     }
 
@@ -142,10 +143,10 @@ public class MainActivityPUTOWNER extends MainActivity {
         @Override
         protected String doInBackground(String... urls) {
             owner = new Owner();
-            owner.setNombre(etName.getText().toString());
-            owner.setApellido(etLastName.getText().toString());
+            owner.setName(etName.getText().toString());
+            owner.setLastname(etLastName.getText().toString());
             owner.setDni(etDNI.getText().toString());
-            owner.setNacionalidad(etNationality.getText().toString());
+            owner.setNationality(etNationality.getText().toString());
 
             return PUT(urls[0], owner);
         }
@@ -154,6 +155,8 @@ public class MainActivityPUTOWNER extends MainActivity {
         @Override
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Updated!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MainActivityPUTOWNER.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -189,7 +192,6 @@ public class MainActivityPUTOWNER extends MainActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 tvJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));

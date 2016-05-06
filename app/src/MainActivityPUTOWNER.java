@@ -17,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,10 +64,10 @@ public class MainActivityPUTOWNER extends MainActivity {
 
             // 3. build jsonObject
             JSONObject jsonObject = new JSONObject();
-            jsonObject.accumulate("nombre", owner.getNombre());
-            jsonObject.accumulate("apellido", owner.getApellido());
+            jsonObject.accumulate("nombre", owner.getName());
+            jsonObject.accumulate("apellido", owner.getLastname());
             jsonObject.accumulate("dni", owner.getDni());
-            jsonObject.accumulate("nacionalidad", owner.getNacionalidad());
+            jsonObject.accumulate("nacionalidad", owner.getNationality());
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -145,10 +144,10 @@ public class MainActivityPUTOWNER extends MainActivity {
         @Override
         protected String doInBackground(String... urls) {
             owner = new Owner();
-            owner.setNombre(etName.getText().toString());
-            owner.setApellido(etLastName.getText().toString());
+            owner.setName(etName.getText().toString());
+            owner.setLastname(etLastName.getText().toString());
             owner.setDni(etDNI.getText().toString());
-            owner.setNacionalidad(etNationality.getText().toString());
+            owner.setNationality(etNationality.getText().toString());
 
             return PUT(urls[0], owner);
         }

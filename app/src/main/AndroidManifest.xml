@@ -24,25 +24,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivityPOSTOWNER"
-            android:label="POST OWNER">
+            android:label="New Owner">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivityPOSTCAR"
-            android:label="POST CAR">
+            android:label="New Car">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivityPUTOWNER"
-            android:label="PUT OWNER">
+            android:label="Edit Owner">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivityPUTCAR"
-            android:label="PUT CAR">
+            android:label="Edit Car">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -53,19 +53,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailsOWNER"
-            android:label="OWNER INFORMATION">
+            android:label="Owner Information">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".DetailsCAR"
-            android:label="CAR INFORMATION">
+            android:label="Car Information">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".About"
-            android:label="ABOUT">
+            android:label="About">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
