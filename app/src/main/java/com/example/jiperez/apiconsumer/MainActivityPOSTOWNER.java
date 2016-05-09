@@ -43,7 +43,6 @@ public class MainActivityPOSTOWNER extends MainActivity {
         InputStream inputStream = null;
         String result = "";
         try {
-
             // 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
 

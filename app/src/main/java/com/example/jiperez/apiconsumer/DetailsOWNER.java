@@ -13,6 +13,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ import java.util.Objects;
 
 public class DetailsOWNER extends MainActivity {
     TextView details;
+    private static JSONObject ownerObject;
 
     @SuppressLint("NewApi")
     @Override
@@ -83,8 +85,50 @@ public class DetailsOWNER extends MainActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(getBaseContext(), "Owner Details!", Toast.LENGTH_LONG).show();
             try {
-                JSONObject jsonObject = new JSONObject(result);
-                details.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
+                ownerObject = new JSONObject(result);
+                details.setText("Name: " + ownerObject.getString("nombre") + "\n" + "Last Name: " + ownerObject.getString("apellido") + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + ownerObject.getString("nacionalidad"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class HttpCars extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject, jsonObject2;
+                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                int tam = jsonArray.length();
+                String owners[] = new String[tam];
+                int count = 0;
+                for (int i = 0; i < tam; i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    aux = jsonObject.getString("owner");
+                    jsonObject2 = new JSONObject(aux);
+                    owners[i] = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
+                    if (owners[i].equals(owndet)) {
+                        count++;
+                    }
+                }
+                if (count == 0) {
+                    Bundle bundle = getIntent().getExtras();
+                    String id = bundle.getString("id");
+                    String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+                    Intent i = new Intent(DetailsOWNER.this, MainActivityDELETE.class);
+                    i.putExtra("url", url);
+                    startActivity(i);
+                }
+                else {
+                    Toast.makeText(getBaseContext(), "Owner is in use, cannot be deleted!", Toast.LENGTH_LONG).show();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -92,12 +136,7 @@ public class DetailsOWNER extends MainActivity {
     }
 
     public void deleteexe(View view) {
-        Bundle bundle = getIntent().getExtras();
-        String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
-        Intent i = new Intent(this, MainActivityDELETE.class);
-        i.putExtra("url", url);
-        startActivity(i);
+        new HttpCars().execute("http://192.168.1.112:8080/cars/api");
     }
 
     public void putexe(View view) {
