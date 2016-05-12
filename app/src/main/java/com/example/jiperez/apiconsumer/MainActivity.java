@@ -34,9 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.about:
-                Intent intent = new Intent(this, About.class);
+                intent = new Intent(this, About.class);
+                startActivity(intent);
+                break;
+            case R.id.contact_me:
+                intent = new Intent(this, ContactME.class);
                 startActivity(intent);
                 break;
             case R.id.exit:
@@ -66,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             Intent i = new Intent(this, MainActivityPOSTCAR.class);
+            i.putExtra("url", url);
+            startActivity(i);
+        }
+    }
+
+    public void searchexe(View view) {
+        String url, api = spinner.getSelectedItem().toString();
+        if (api.equals("Cars")) url = "http://192.168.1.112:8080/cars/api";
+        else url = "http://192.168.1.112:8080/cars/apiOwner";
+        if(url.contains("Owner")){
+            Intent i = new Intent(this, MainActivitySEARCHOWNER.class);
+            i.putExtra("url", url);
+            startActivity(i);
+        }
+        else {
+            Intent i = new Intent(this, MainActivitySEARCHCAR.class);
             i.putExtra("url", url);
             startActivity(i);
         }

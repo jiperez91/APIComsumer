@@ -17,14 +17,15 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="wrap_content"
         android:id="@+id/imageView3"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/owner" />
+        android:src="@drawable/owner"
+        android:layout_gravity="center_horizontal" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
 
         <Button
             android:layout_width="150dp"
@@ -39,7 +40,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/buttondelete"
-            android:text="PUT"
+            android:text="EDIT"
             android:id="@+id/buttonput"
             android:onClick="putexe"
             android:layout_marginRight="20dp"

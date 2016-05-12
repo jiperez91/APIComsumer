@@ -3,17 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#9b8c8c"
-    android:weightSum="1">
+    android:background="#9b8c8c">
 
     <Spinner
         android:id="@+id/spinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:popupBackground="#9b8c8c"
-        android:layout_marginRight="13dp"
-        android:layout_marginLeft="37dp" />
+        android:layout_gravity="center"
+        android:backgroundTint="#ad1919"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="10dp" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -27,23 +27,33 @@
         android:background="#9b8c8c">
 
         <Button
-            android:layout_width="150dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="GET"
+            android:text="LIST"
             android:id="@+id/buttonget"
             android:onClick="getexe"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
         <Button
-            android:layout_width="150dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="POST"
+            android:text="NEW"
             android:id="@+id/buttonpost"
             android:layout_alignTop="@+id/buttonget"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:onClick="postexe" />
+
+        <Button
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="SEARCH"
+            android:id="@+id/buttonsearch"
+            android:layout_gravity="center_horizontal"
+            android:onClick="searchexe"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

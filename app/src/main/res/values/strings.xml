@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">APIConsumer</string>
-    <string name="POST_CAR">POST CAR</string>
-    <string name="POST_OWNER">POST OWNER</string>
+    <string name="SAVE">SAVE</string>
     <string name="PUT_OWNER">EDIT OWNER</string>
     <string name="PUT_CAR">EDIT CAR</string>
+    <string name="SEARCH_OWNER">SEARCH OWNER</string>
+    <string name="SEARCH_CAR">SEARCH CAR</string>
     <string name="about_author">Copyright © 2016 Juan Ignacio Pérez</string>
+    <string name="send_message">SEND MESSAGE</string>
     <string name="app_description">APIConsumer is an android application made for consuming web services from a Grails project called Cars.</string>
 </resources>

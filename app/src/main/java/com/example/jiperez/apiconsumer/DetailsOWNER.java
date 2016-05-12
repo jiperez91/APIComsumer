@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DetailsOWNER extends MainActivity {
@@ -87,6 +88,7 @@ public class DetailsOWNER extends MainActivity {
             try {
                 ownerObject = new JSONObject(result);
                 details.setText("Name: " + ownerObject.getString("nombre") + "\n" + "Last Name: " + ownerObject.getString("apellido") + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + ownerObject.getString("nacionalidad"));
+                new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -116,6 +118,7 @@ public class DetailsOWNER extends MainActivity {
                     owners[i] = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
                     if (owners[i].equals(owndet)) {
                         count++;
+                        break;
                     }
                 }
                 if (count == 0) {
@@ -128,6 +131,50 @@ public class DetailsOWNER extends MainActivity {
                 }
                 else {
                     Toast.makeText(getBaseContext(), "Owner is in use, cannot be deleted!", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class HttpCars2 extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject, jsonObject2;
+                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                ArrayList<String> cars = new ArrayList<String>();
+                String owner_cars = "";
+                int tam = jsonArray.length();
+                for (int i = 0; i < tam; i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    aux = jsonObject.getString("owner");
+                    jsonObject2 = new JSONObject(aux);
+                    if(owndet.equals(jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido"))){
+                        cars.add(jsonObject.getString("make") + " " + jsonObject.getString("model"));
+                    }
+                }
+                int tam2 = cars.size();
+                if(tam2 != 0) {
+                    if (tam2 == 1) {
+                        owner_cars = cars.get(0);
+                        details.append("\nCar: " + owner_cars);
+                    }
+                    else {
+                        for (int i = 0; i < tam2; i++) {
+                            if (i != tam2-1) owner_cars += cars.get(i) + ", ";
+                            else owner_cars += cars.get(i);
+                        }
+                        details.append("\nCars: " + owner_cars);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
