@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.Iterator;
 
 @SuppressWarnings("ALL")
@@ -145,21 +146,25 @@ public class MainActivityPUTCAR extends MainActivity {
     }
 
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.btnPost:
-                if(!validate())
-                    Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                else {
-                    Bundle bundle = getIntent().getExtras();
-                    String url = bundle.getString("url");
-                    // call AsynTask to perform network operation on separate thread
-                    new HttpAsyncTask().execute(url);
-                    break;
-                }
+        if(!validate_not_empty())
+            Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
+        else if (!validate_make(etMake.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid make! (max size = 50)", Toast.LENGTH_LONG).show();
+        else if (!validate_model(etModel.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid model! (max size = 50)", Toast.LENGTH_LONG).show();
+        else if (!validate_year(etYear.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid year! (range = (1900, current year), numeric only)", Toast.LENGTH_LONG).show();
+        else if (!validate_plate(etPlate.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid plate! (format = 3 uppercase letters and 3 numbers (e.g. GDK432), max size = 6)", Toast.LENGTH_LONG).show();
+        else {
+            Bundle bundle = getIntent().getExtras();
+            String url = bundle.getString("url");
+            // call AsynTask to perform network operation on separate thread
+            new HttpAsyncTask().execute(url);
         }
     }
 
-    private boolean validate(){
+    private boolean validate_not_empty(){
         if(etMake.getText().toString().trim().equals(""))
             return false;
         else if(etModel.getText().toString().trim().equals(""))
@@ -170,6 +175,30 @@ public class MainActivityPUTCAR extends MainActivity {
             return false;
         else
             return true;
+    }
+
+    private boolean validate_make(String make) {
+        if (make.length() > 50)
+            return false;
+        return true;
+    }
+
+    private boolean validate_model(String model) {
+        if (model.length() > 50)
+            return false;
+        return true;
+    }
+
+    private boolean validate_year(String year) {
+        if (!year.matches("[0-9]+") || Integer.parseInt(year) < 1900 || Integer.parseInt(year) > Calendar.getInstance().get(Calendar.YEAR))
+            return false;
+        return true;
+    }
+
+    private boolean validate_plate(String plate) {
+        if (plate.length() > 6 || !plate.matches("[A-Z]{3}[0-9]{3}"))
+            return false;
+        return true;
     }
 
     private class RetrieveSiteData extends AsyncTask<String, Void, String> {
@@ -186,6 +215,10 @@ public class MainActivityPUTCAR extends MainActivity {
                 JSONObject jsonObject2 = new JSONObject(aux);
                 aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
                 tvJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+                etMake.setText(jsonObject.getString("make"));
+                etModel.setText(jsonObject.getString("model"));
+                etYear.setText(jsonObject.getString("year"));
+                etPlate.setText(jsonObject.getString("plate"));
             } catch (JSONException e){
                 e.printStackTrace();
             }

@@ -112,21 +112,25 @@ public class MainActivityPUTOWNER extends MainActivity {
     }
 
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.btnPost:
-                if(!validate())
-                    Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
-                else {
-                    Bundle bundle = getIntent().getExtras();
-                    String url = bundle.getString("url");
-                    // call AsynTask to perform network operation on separate thread
-                    new HttpAsyncTask().execute(url);
-                    break;
-                }
+        if(!validate_not_empty())
+            Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
+        else if (!validate_name(etName.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid name! (letters only, max size = 25)", Toast.LENGTH_LONG).show();
+        else if (!validate_lastname(etLastName.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid last name! (letters only, max size = 25)", Toast.LENGTH_LONG).show();
+        else if (!validate_nationality(etNationality.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid nationality! (letters only, max size = 20)", Toast.LENGTH_LONG).show();
+        else if (!validate_dni(etDNI.getText().toString()))
+            Toast.makeText(getBaseContext(), "Invalid DNI! (numeric only, size = 7 or 8)", Toast.LENGTH_LONG).show();
+        else {
+            Bundle bundle = getIntent().getExtras();
+            String url = bundle.getString("url");
+            // call AsynTask to perform network operation on separate thread
+            new HttpAsyncTask().execute(url);
         }
     }
 
-    private boolean validate(){
+    private boolean validate_not_empty() {
         if(etName.getText().toString().trim().equals(""))
             return false;
         else if(etLastName.getText().toString().trim().equals(""))
@@ -137,6 +141,30 @@ public class MainActivityPUTOWNER extends MainActivity {
             return false;
         else
             return true;
+    }
+
+    private boolean validate_name(String name) {
+        if (name.length() > 25 || !name.matches("[a-zA-Z]+"))
+            return false;
+        return true;
+    }
+
+    private boolean validate_lastname(String last_name) {
+        if (last_name.length() > 25 || !last_name.matches("[a-zA-Z]+"))
+            return false;
+        return true;
+    }
+
+    private boolean validate_nationality(String nationality) {
+        if (nationality.length() > 20 || !nationality.matches("[a-zA-Z]+"))
+            return false;
+        return true;
+    }
+
+    private boolean validate_dni(String dni) {
+        if (dni.length() < 7 || dni.length() > 8 || !dni.matches("[0-9]+"))
+            return false;
+        return true;
     }
 
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
@@ -195,6 +223,10 @@ public class MainActivityPUTOWNER extends MainActivity {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 tvJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
+                etName.setText(jsonObject.getString("nombre"));
+                etLastName.setText(jsonObject.getString("apellido"));
+                etNationality.setText(jsonObject.getString("nacionalidad"));
+                etDNI.setText(jsonObject.getString("dni"));
             } catch (JSONException e){
                 e.printStackTrace();
             }

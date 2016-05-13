@@ -30,6 +30,7 @@ public class ContactME extends MainActivity {
             Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
         else {
             Intent itSend = new Intent(Intent.ACTION_SEND);
+            itSend.putExtra(Intent.EXTRA_SUBJECT, "APIConsumer Message");
             itSend.putExtra(Intent.EXTRA_EMAIL, new String[]{"juanignacioperez91@gmail.com"});
             itSend.putExtra(Intent.EXTRA_TEXT, "Hi! I'm " + etNameContact.getText().toString() + ":" + "\n" + "\n" + etMessage.getText().toString());
             itSend.setType("message/rfc822");
