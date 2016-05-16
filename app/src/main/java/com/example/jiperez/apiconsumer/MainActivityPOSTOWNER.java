@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -115,8 +118,7 @@ public class MainActivityPOSTOWNER extends MainActivity {
         else {
             Bundle bundle = getIntent().getExtras();
             String url = bundle.getString("url");
-            // call AsynTask to perform network operation on separate thread
-            new HttpAsyncTask().execute(url);
+            new ValidateDNIUnique().execute(url);
         }
     }
 
@@ -157,6 +159,30 @@ public class MainActivityPOSTOWNER extends MainActivity {
         return true;
     }
 
+    public static String GET(String url){
+        InputStream inputStream = null;
+        String result = "";
+        try {
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+        return result;
+    }
+
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -175,6 +201,36 @@ public class MainActivityPOSTOWNER extends MainActivity {
             Toast.makeText(getBaseContext(), "Posted!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MainActivityPOSTOWNER.this, MainActivity.class);
             startActivity(intent);
+        }
+    }
+
+    private class ValidateDNIUnique extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) { return GET(urls[0]); }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                String dni;
+                Boolean flag = true;
+                for (int i = 0; i < length; i++) {
+                    JSONObject owner = jsonArray.getJSONObject(i);
+                    dni = owner.getString("dni");
+                    if(etDNI.getText().toString().equals(dni)) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag)
+                    new HttpAsyncTask().execute("http://192.168.1.112:8080/cars/apiOwner");
+                else
+                    Toast.makeText(getBaseContext(), "DNI is duplicated, must be unique!", Toast.LENGTH_LONG).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

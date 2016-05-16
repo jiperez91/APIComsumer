@@ -129,8 +129,7 @@ public class MainActivityPOSTCAR extends MainActivity {
         else {
             Bundle bundle = getIntent().getExtras();
             String url = bundle.getString("url");
-            // call AsynTask to perform network operation on separate thread
-            new HttpAsyncTask().execute(url);
+            new ValidatePlateUnique().execute(url);
         }
     }
 
@@ -218,9 +217,7 @@ public class MainActivityPOSTCAR extends MainActivity {
 
     private class HttpAsyncGet extends AsyncTask<String, Void, String> {
         @Override
-        protected String doInBackground(String... urls) {
-            return GET(urls[0]);
-        }
+        protected String doInBackground(String... urls) { return GET(urls[0]); }
 
         // onPostExecute displays the results of the AsyncTask.
         @Override
@@ -234,6 +231,36 @@ public class MainActivityPOSTCAR extends MainActivity {
                     valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivityPOSTCAR.this, android.R.layout.simple_spinner_item, valores));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ValidatePlateUnique extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) { return GET(urls[0]); }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                int length = jsonArray.length();
+                String plate;
+                Boolean flag = true;
+                for (int i = 0; i < length; i++) {
+                    JSONObject car = jsonArray.getJSONObject(i);
+                    plate = car.getString("plate");
+                    if(etPlate.getText().toString().equals(plate)) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag)
+                    new HttpAsyncTask().execute("http://192.168.1.112:8080/cars/api");
+                else
+                    Toast.makeText(getBaseContext(), "Plate is duplicated, must be unique!", Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

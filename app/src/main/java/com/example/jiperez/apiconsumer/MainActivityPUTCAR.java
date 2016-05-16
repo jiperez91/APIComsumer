@@ -36,7 +36,7 @@ public class MainActivityPUTCAR extends MainActivity {
     Button btnPost;
     Car car;
     Spinner spinner;
-    private static String aux2;
+    private static String aux2, smake, smodel, syear, splate, sowner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +156,8 @@ public class MainActivityPUTCAR extends MainActivity {
             Toast.makeText(getBaseContext(), "Invalid year! (range = (1900, current year), numeric only)", Toast.LENGTH_LONG).show();
         else if (!validate_plate(etPlate.getText().toString()))
             Toast.makeText(getBaseContext(), "Invalid plate! (format = 3 uppercase letters and 3 numbers (e.g. GDK432), max size = 6)", Toast.LENGTH_LONG).show();
+        //else if (!validate_changes())
+            //Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
         else {
             Bundle bundle = getIntent().getExtras();
             String url = bundle.getString("url");
@@ -219,6 +221,10 @@ public class MainActivityPUTCAR extends MainActivity {
                 etModel.setText(jsonObject.getString("model"));
                 etYear.setText(jsonObject.getString("year"));
                 etPlate.setText(jsonObject.getString("plate"));
+                smake = etMake.getText().toString();
+                smodel = etModel.getText().toString();
+                syear = etYear.getText().toString();
+                splate = etPlate.getText().toString();
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -246,6 +252,7 @@ public class MainActivityPUTCAR extends MainActivity {
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivityPUTCAR.this, android.R.layout.simple_spinner_item, valores));
                 spinner.setSelection(pos);
+                sowner = spinner.getSelectedItem().toString();
             } catch (JSONException e){
                 e.printStackTrace();
             }

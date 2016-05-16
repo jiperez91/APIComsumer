@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 @SuppressWarnings("ALL")
 public class MainActivityPUTOWNER extends MainActivity {
@@ -30,6 +32,7 @@ public class MainActivityPUTOWNER extends MainActivity {
     TextView tvJson;
     Button btnPost;
     Owner owner;
+    private static JSONObject ownerObject;
     private static final String TAG = "LOGGED:::MainActivity";
 
     @Override
@@ -221,13 +224,58 @@ public class MainActivityPUTOWNER extends MainActivity {
         @Override
         protected void onPostExecute(String result) {
             try {
-                JSONObject jsonObject = new JSONObject(result);
-                tvJson.setText("Name: " + jsonObject.getString("nombre") + "\n" + "Last Name: " + jsonObject.getString("apellido") + "\n" + "DNI: " + jsonObject.getString("dni") + "\n" + "Nationality: " + jsonObject.getString("nacionalidad"));
-                etName.setText(jsonObject.getString("nombre"));
-                etLastName.setText(jsonObject.getString("apellido"));
-                etNationality.setText(jsonObject.getString("nacionalidad"));
-                etDNI.setText(jsonObject.getString("dni"));
+                ownerObject = new JSONObject(result);
+                tvJson.setText("Name: " + ownerObject.getString("nombre") + "\n" + "Last Name: " + ownerObject.getString("apellido") + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + ownerObject.getString("nacionalidad"));
+                new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
+                etName.setText(ownerObject.getString("nombre"));
+                etLastName.setText(ownerObject.getString("apellido"));
+                etDNI.setText(ownerObject.getString("dni"));
+                etNationality.setText(ownerObject.getString("nacionalidad"));
             } catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class HttpCars2 extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject, jsonObject2;
+                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                ArrayList<String> cars = new ArrayList<String>();
+                String owner_cars = "";
+                int tam = jsonArray.length();
+                for (int i = 0; i < tam; i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    aux = jsonObject.getString("owner");
+                    jsonObject2 = new JSONObject(aux);
+                    if(owndet.equals(jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido"))){
+                        cars.add(jsonObject.getString("make") + " " + jsonObject.getString("model"));
+                    }
+                }
+                int tam2 = cars.size();
+                if(tam2 != 0) {
+                    if (tam2 == 1) {
+                        owner_cars = cars.get(0);
+                        tvJson.append("\nCar: " + owner_cars);
+                    }
+                    else {
+                        for (int i = 0; i < tam2; i++) {
+                            if (i != tam2-1) owner_cars += cars.get(i) + ", ";
+                            else owner_cars += cars.get(i);
+                        }
+                        tvJson.append("\nCars: " + owner_cars);
+                    }
+                }
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
