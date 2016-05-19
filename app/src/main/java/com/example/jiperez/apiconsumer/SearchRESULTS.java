@@ -41,6 +41,18 @@ public class SearchRESULTS extends  MainActivity {
         new HttpAsyncTask().execute(url);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
@@ -113,7 +125,7 @@ public class SearchRESULTS extends  MainActivity {
                         }
                         if (contains) {
                             ids.add(owner.getString("id"));
-                            listContents.add("ID " + owner.getString("id") + " - " + owner.getString("nombre") + " " + owner.getString("apellido"));
+                            listContents.add("ID " + owner.getString("id") + " - " + upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido")));
                         }
                     }
                     if (listContents.isEmpty()) {
@@ -169,7 +181,7 @@ public class SearchRESULTS extends  MainActivity {
                         }
                         if (contains) {
                             ids.add(car.getString("id"));
-                            listContents.add("ID " + car.getString("id") + " - " + car.getString("make") + " " + car.getString("model"));
+                            listContents.add("ID " + car.getString("id") + " - " + upperCaseAllFirst(car.getString("make")) + " " + upperCaseAllFirst(car.getString("model")));
                         }
                     }
                     if (listContents.isEmpty()) {

@@ -41,6 +41,18 @@ public class DetailsOWNER extends MainActivity {
         new HttpAsyncTask().execute(url);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     public static String GET(String url){
         InputStream inputStream = null;
         String result = "";
@@ -87,7 +99,7 @@ public class DetailsOWNER extends MainActivity {
             Toast.makeText(getBaseContext(), "Owner Details!", Toast.LENGTH_LONG).show();
             try {
                 ownerObject = new JSONObject(result);
-                details.setText("Name: " + ownerObject.getString("nombre") + "\n" + "Last Name: " + ownerObject.getString("apellido") + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + ownerObject.getString("nacionalidad"));
+                details.setText("Name: " + upperCaseAllFirst(ownerObject.getString("nombre")) + "\n" + "Last Name: " + upperCaseAllFirst(ownerObject.getString("apellido")) + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + upperCaseAllFirst(ownerObject.getString("nacionalidad")));
                 new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -159,7 +171,7 @@ public class DetailsOWNER extends MainActivity {
                     aux = jsonObject.getString("owner");
                     jsonObject2 = new JSONObject(aux);
                     if(owndet.equals(jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido"))){
-                        cars.add(jsonObject.getString("make") + " " + jsonObject.getString("model"));
+                        cars.add(upperCaseAllFirst(jsonObject.getString("make")) + " " + upperCaseAllFirst(jsonObject.getString("model")));
                     }
                 }
                 int tam2 = cars.size();

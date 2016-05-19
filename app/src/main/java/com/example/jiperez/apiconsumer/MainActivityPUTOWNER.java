@@ -53,6 +53,18 @@ public class MainActivityPUTOWNER extends MainActivity {
         new RetrieveSiteData().execute(url);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     public static String PUT(String url, Owner owner) {
         InputStream inputStream = null;
         String result = "";
@@ -125,11 +137,10 @@ public class MainActivityPUTOWNER extends MainActivity {
             Toast.makeText(getBaseContext(), "Invalid nationality! (letters only, max size = 20)", Toast.LENGTH_LONG).show();
         else if (!validate_dni(etDNI.getText().toString()))
             Toast.makeText(getBaseContext(), "Invalid DNI! (numeric only, size = 7 or 8)", Toast.LENGTH_LONG).show();
+        else if (!validate_changes())
+            Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
         else {
-            Bundle bundle = getIntent().getExtras();
-            String url = bundle.getString("url");
-            // call AsynTask to perform network operation on separate thread
-            new HttpAsyncTask().execute(url);
+            new ValidateUniqueDNI().execute("http://192.168.1.112:8080/cars/apiOwner");
         }
     }
 
@@ -146,20 +157,30 @@ public class MainActivityPUTOWNER extends MainActivity {
             return true;
     }
 
+    private boolean validate_changes() {
+        try {
+            if (ownerObject.getString("nombre").toLowerCase().equals(etName.getText().toString().toLowerCase()) && ownerObject.getString("apellido").toLowerCase().equals(etLastName.getText().toString().toLowerCase()) && ownerObject.getString("dni").equals(etDNI.getText().toString()) && ownerObject.getString("nacionalidad").toLowerCase().equals(etNationality.getText().toString().toLowerCase()))
+                return false;
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     private boolean validate_name(String name) {
-        if (name.length() > 25 || !name.matches("[a-zA-Z]+"))
+        if (name.length() > 25 || !name.matches("[a-záéíóúñüÁÉÍÓÚÑÜA-Z ]+"))
             return false;
         return true;
     }
 
     private boolean validate_lastname(String last_name) {
-        if (last_name.length() > 25 || !last_name.matches("[a-zA-Z]+"))
+        if (last_name.length() > 25 || !last_name.matches("[a-záéíóúñüÁÉÍÓÚÑÜA-Z ]+"))
             return false;
         return true;
     }
 
     private boolean validate_nationality(String nationality) {
-        if (nationality.length() > 20 || !nationality.matches("[a-zA-Z]+"))
+        if (nationality.length() > 20 || !nationality.matches("[a-záéíóúñüÁÉÍÓÚÑÜA-Z ]+"))
             return false;
         return true;
     }
@@ -225,12 +246,12 @@ public class MainActivityPUTOWNER extends MainActivity {
         protected void onPostExecute(String result) {
             try {
                 ownerObject = new JSONObject(result);
-                tvJson.setText("Name: " + ownerObject.getString("nombre") + "\n" + "Last Name: " + ownerObject.getString("apellido") + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + ownerObject.getString("nacionalidad"));
+                tvJson.setText("Name: " + upperCaseAllFirst(ownerObject.getString("nombre")) + "\n" + "Last Name: " + upperCaseAllFirst(ownerObject.getString("apellido")) + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + upperCaseAllFirst(ownerObject.getString("nacionalidad")));
                 new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
-                etName.setText(ownerObject.getString("nombre"));
-                etLastName.setText(ownerObject.getString("apellido"));
+                etName.setText(upperCaseAllFirst(ownerObject.getString("nombre")));
+                etLastName.setText(upperCaseAllFirst(ownerObject.getString("apellido")));
                 etDNI.setText(ownerObject.getString("dni"));
-                etNationality.setText(ownerObject.getString("nacionalidad"));
+                etNationality.setText(upperCaseAllFirst(ownerObject.getString("nacionalidad")));
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -274,6 +295,47 @@ public class MainActivityPUTOWNER extends MainActivity {
                         }
                         tvJson.append("\nCars: " + owner_cars);
                     }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class ValidateUniqueDNI extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            return GET(urls[0]);
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                if (!ownerObject.getString("dni").equals(etDNI.getText().toString())) {
+                    JSONArray jsonArray = new JSONArray(result);
+                    int length = jsonArray.length();
+                    String dni;
+                    Boolean flag = true;
+                    for (int i = 0; i < length; i++) {
+                        JSONObject owner = jsonArray.getJSONObject(i);
+                        dni = owner.getString("dni");
+                        if (etDNI.getText().toString().equals(dni)) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        Bundle bundle = getIntent().getExtras();
+                        String url = bundle.getString("url");
+                        new HttpAsyncTask().execute(url);
+                    } else
+                        Toast.makeText(getBaseContext(), "DNI is already in used and must be unique!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    new HttpAsyncTask().execute(url);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

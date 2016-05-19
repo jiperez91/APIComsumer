@@ -36,6 +36,18 @@ public class DetailsCAR extends MainActivity {
         new HttpAsyncTask().execute(url);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     public static String GET(String url){
         InputStream inputStream = null;
         String result = "";
@@ -85,7 +97,7 @@ public class DetailsCAR extends MainActivity {
                 String aux = jsonObject.getString("owner");
                 JSONObject jsonObject2 = new JSONObject(aux);
                 String aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
-                details.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+                details.setText("Make: " + upperCaseAllFirst(jsonObject.getString("make")) + "\n" + "Model: " + upperCaseAllFirst(jsonObject.getString("model")) + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + upperCaseAllFirst(aux2));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

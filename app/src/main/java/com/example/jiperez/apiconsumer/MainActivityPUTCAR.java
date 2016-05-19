@@ -58,6 +58,18 @@ public class MainActivityPUTCAR extends MainActivity {
         new RetrieveSiteData2().execute("http://192.168.1.112:8080/cars/apiOwner");
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
@@ -68,7 +80,7 @@ public class MainActivityPUTCAR extends MainActivity {
         return result;
     }
 
-    public static String PUT(String url, Car car, Long spinner_id) {
+    public static String PUT(String url, Car car, Long owner_id) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -86,7 +98,7 @@ public class MainActivityPUTCAR extends MainActivity {
             jsonObject.accumulate("model", car.getModel());
             jsonObject.accumulate("year", car.getYear());
             jsonObject.accumulate("plate", car.getPlate());
-            jsonObject.accumulate("owner", spinner_id + 1);
+            jsonObject.accumulate("owner", owner_id);
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -155,14 +167,11 @@ public class MainActivityPUTCAR extends MainActivity {
         else if (!validate_year(etYear.getText().toString()))
             Toast.makeText(getBaseContext(), "Invalid year! (range = (1900, current year), numeric only)", Toast.LENGTH_LONG).show();
         else if (!validate_plate(etPlate.getText().toString()))
-            Toast.makeText(getBaseContext(), "Invalid plate! (format = 3 uppercase letters and 3 numbers (e.g. GDK432), max size = 6)", Toast.LENGTH_LONG).show();
-        //else if (!validate_changes())
-            //Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Invalid plate! (format = 3 uppercase letters and 3 numbers (e.g. GDK432))", Toast.LENGTH_LONG).show();
+        else if (!validate_changes())
+            Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
         else {
-            Bundle bundle = getIntent().getExtras();
-            String url = bundle.getString("url");
-            // call AsynTask to perform network operation on separate thread
-            new HttpAsyncTask().execute(url);
+            new ValidateUniquePlate().execute("http://192.168.1.112:8080/cars/api");
         }
     }
 
@@ -177,6 +186,12 @@ public class MainActivityPUTCAR extends MainActivity {
             return false;
         else
             return true;
+    }
+
+    private boolean validate_changes() {
+        if (smake.toLowerCase().equals(etMake.getText().toString().toLowerCase()) && smodel.toLowerCase().equals(etModel.getText().toString().toLowerCase()) && syear.equals(etYear.getText().toString()) && splate.equals(etPlate.getText().toString()) && sowner.toLowerCase().equals(spinner.getSelectedItem().toString().toLowerCase()))
+            return false;
+        return true;
     }
 
     private boolean validate_make(String make) {
@@ -215,10 +230,10 @@ public class MainActivityPUTCAR extends MainActivity {
                 JSONObject jsonObject = new JSONObject(result);
                 String aux = jsonObject.getString("owner");
                 JSONObject jsonObject2 = new JSONObject(aux);
-                aux2 = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
-                tvJson.setText("Make: " + jsonObject.getString("make") + "\n" + "Model: " + jsonObject.getString("model") + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
-                etMake.setText(jsonObject.getString("make"));
-                etModel.setText(jsonObject.getString("model"));
+                aux2 = jsonObject2.getString("dni");
+                tvJson.setText("Make: " + upperCaseAllFirst(jsonObject.getString("make")) + "\n" + "Model: " + upperCaseAllFirst(jsonObject.getString("model")) + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+                etMake.setText(upperCaseAllFirst(jsonObject.getString("make")));
+                etModel.setText(upperCaseAllFirst(jsonObject.getString("model")));
                 etYear.setText(jsonObject.getString("year"));
                 etPlate.setText(jsonObject.getString("plate"));
                 smake = etMake.getText().toString();
@@ -245,8 +260,8 @@ public class MainActivityPUTCAR extends MainActivity {
                 String[] valores = new String[length];
                 for (int i = 0; i < length; i++) {
                     JSONObject owner = jsonArray.getJSONObject(i);
-                    valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
-                    if (valores[i].equals(aux2)){
+                    valores[i] = owner.getString("id") + " - " + upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido"));
+                    if (owner.getString("dni").equals(aux2)){
                         pos = i;
                     }
                 }
@@ -268,7 +283,16 @@ public class MainActivityPUTCAR extends MainActivity {
             car.setYear(etYear.getText().toString());
             car.setPlate(etPlate.getText().toString());
 
-            return PUT(urls[0], car, spinner.getSelectedItemId());
+            String the_owner = spinner.getSelectedItem().toString();
+            int pos = 0;
+            for (int i = 0; i < the_owner.length(); i++) {
+                if (the_owner.charAt(i) == ' ') {
+                    pos = i;
+                    break;
+                }
+            }
+            String id_owner = the_owner.substring(0, pos);
+            return PUT(urls[0], car, Long.parseLong(id_owner));
         }
 
         // onPostExecute displays the results of the AsyncTask.
@@ -279,4 +303,45 @@ public class MainActivityPUTCAR extends MainActivity {
             startActivity(intent);
         }
     }
+
+    private class ValidateUniquePlate extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) { return GET(urls[0]); }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                if (!splate.equals(etPlate.getText().toString())) {
+                    JSONArray jsonArray = new JSONArray(result);
+                    int length = jsonArray.length();
+                    String plate;
+                    Boolean flag = true;
+                    for (int i = 0; i < length; i++) {
+                        JSONObject car = jsonArray.getJSONObject(i);
+                        plate = car.getString("plate");
+                        if(etPlate.getText().toString().equals(plate)) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if(flag) {
+                        Bundle bundle = getIntent().getExtras();
+                        String url = bundle.getString("url");
+                        new HttpAsyncTask().execute(url);
+                    }
+                    else
+                        Toast.makeText(getBaseContext(), "Plate is already in used and must be unique!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Bundle bundle = getIntent().getExtras();
+                    String url = bundle.getString("url");
+                    new HttpAsyncTask().execute(url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
+

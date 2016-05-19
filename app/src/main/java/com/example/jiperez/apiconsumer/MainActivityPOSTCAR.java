@@ -52,7 +52,19 @@ public class MainActivityPOSTCAR extends MainActivity {
         new HttpAsyncGet().execute("http://192.168.1.112:8080/cars/apiOwner");
     }
 
-    public static String POST(String url, Car car, Long spinner_id) {
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
+    public static String POST(String url, Car car, Long id_owner) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -70,7 +82,7 @@ public class MainActivityPOSTCAR extends MainActivity {
             jsonObject.accumulate("model", car.getModel());
             jsonObject.accumulate("year", car.getYear());
             jsonObject.accumulate("plate", car.getPlate());
-            jsonObject.accumulate("owner", spinner_id + 1);
+            jsonObject.accumulate("owner", id_owner);
 
             // 4. convert JSONObject to JSON to String
             json = jsonObject.toString();
@@ -125,11 +137,11 @@ public class MainActivityPOSTCAR extends MainActivity {
         else if (!validate_year(etYear.getText().toString()))
             Toast.makeText(getBaseContext(), "Invalid year! (range = (1900, current year), numeric only)", Toast.LENGTH_LONG).show();
         else if (!validate_plate(etPlate.getText().toString()))
-            Toast.makeText(getBaseContext(), "Invalid plate! (format = [A-Z]{3}[0-9]{3}, max size = 6)", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Invalid plate! (format = 3 uppercase letters and 3 numbers (e.g. GDK432))", Toast.LENGTH_LONG).show();
         else {
             Bundle bundle = getIntent().getExtras();
             String url = bundle.getString("url");
-            new ValidatePlateUnique().execute(url);
+            new ValidateUniquePlate().execute(url);
         }
     }
 
@@ -179,7 +191,16 @@ public class MainActivityPOSTCAR extends MainActivity {
             car.setYear(etYear.getText().toString());
             car.setPlate(etPlate.getText().toString());
 
-            return POST(urls[0], car, spinner.getSelectedItemId());
+            String the_owner = spinner.getSelectedItem().toString();
+            int pos = 0;
+            for (int i = 0; i < the_owner.length(); i++) {
+                if (the_owner.charAt(i) == ' ') {
+                    pos = i;
+                    break;
+                }
+            }
+            String id_owner = the_owner.substring(0, pos);
+            return POST(urls[0], car, Long.parseLong(id_owner));
         }
 
         // onPostExecute displays the results of the AsyncTask.
@@ -228,7 +249,7 @@ public class MainActivityPOSTCAR extends MainActivity {
                 String[] valores = new String[length];
                 for (int i = 0; i < length; i++) {
                     JSONObject owner = jsonArray.getJSONObject(i);
-                    valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
+                    valores[i] = owner.getString("id") + " - " + upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido"));
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivityPOSTCAR.this, android.R.layout.simple_spinner_item, valores));
             } catch (JSONException e) {
@@ -237,7 +258,7 @@ public class MainActivityPOSTCAR extends MainActivity {
         }
     }
 
-    private class ValidatePlateUnique extends AsyncTask<String, Void, String> {
+    private class ValidateUniquePlate extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) { return GET(urls[0]); }
 
@@ -260,7 +281,7 @@ public class MainActivityPOSTCAR extends MainActivity {
                 if(flag)
                     new HttpAsyncTask().execute("http://192.168.1.112:8080/cars/api");
                 else
-                    Toast.makeText(getBaseContext(), "Plate is duplicated, must be unique!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Plate is already in used and must be unique!", Toast.LENGTH_LONG).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

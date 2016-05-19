@@ -13,7 +13,7 @@
         android:id="@+id/acerca_de"
         android:textStyle="bold|italic"
         android:textSize="37dp"
-        android:textColor="#ad1919"
+        android:textColor="#000000"
         android:textAlignment="center" />
     <ImageView
         android:layout_width="254dp"

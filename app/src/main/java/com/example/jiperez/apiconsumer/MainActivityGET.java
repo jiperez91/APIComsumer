@@ -42,6 +42,18 @@ public class MainActivityGET extends MainActivity {
         new HttpAsyncTask().execute(url);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     public static String GET(String url){
         InputStream inputStream = null;
         String result = "";
@@ -95,7 +107,7 @@ public class MainActivityGET extends MainActivity {
                     List<String> listContents = new ArrayList<String>(length);
                     for (int i = 0; i < length; i++) {
                         JSONObject owner = jsonArray.getJSONObject(i);
-                        listContents.add("ID " + owner.getString("id") + " - " + owner.getString("nombre") + " " + owner.getString("apellido"));
+                        listContents.add("ID " + owner.getString("id") + " - " + upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido")));
                     }
                     lsvw.setAdapter(new ArrayAdapter<String>(MainActivityGET.this, android.R.layout.simple_list_item_1, listContents));
 
@@ -124,7 +136,7 @@ public class MainActivityGET extends MainActivity {
                     List<String> listContents = new ArrayList<String>(length);
                     for (int i = 0; i < length; i++) {
                         JSONObject car = jsonArray.getJSONObject(i);
-                        listContents.add("ID " + car.getString("id") + " - " + car.getString("make") + " " + car.getString("model"));
+                        listContents.add("ID " + car.getString("id") + " - " + upperCaseAllFirst(car.getString("make")) + " " + upperCaseAllFirst(car.getString("model")));
                     }
                     lsvw.setAdapter(new ArrayAdapter<String>(MainActivityGET.this, android.R.layout.simple_list_item_1, listContents));
 

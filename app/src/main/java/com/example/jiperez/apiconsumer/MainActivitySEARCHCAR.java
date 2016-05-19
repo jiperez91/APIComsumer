@@ -45,6 +45,18 @@ public class MainActivitySEARCHCAR extends MainActivity {
         new HttpAsyncGet().execute("http://192.168.1.112:8080/cars/apiOwner");
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
     public void onClick(View view) {
         ArrayList<String> array = new ArrayList<String>();
         if(!etMake.getText().toString().trim().equals("")){
@@ -118,7 +130,7 @@ public class MainActivitySEARCHCAR extends MainActivity {
                 valores[0] = "";
                 for (int i = 1; i < length+1; i++) {
                     JSONObject owner = jsonArray.getJSONObject(i-1);
-                    valores[i] = owner.getString("nombre") + " " + owner.getString("apellido");
+                    valores[i] = upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido"));
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivitySEARCHCAR.this, android.R.layout.simple_spinner_item, valores));
             } catch (JSONException e) {
