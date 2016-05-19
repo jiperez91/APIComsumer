@@ -59,24 +59,40 @@ public class MainActivitySEARCHCAR extends MainActivity {
 
     public void onClick(View view) {
         ArrayList<String> array = new ArrayList<String>();
+        ArrayList<Integer> index = new ArrayList<Integer>();
         if(!etMake.getText().toString().trim().equals("")){
             array.add(etMake.getText().toString().toLowerCase());
+            index.add(0);
         }
         if(!etModel.getText().toString().trim().equals("")){
             array.add(etModel.getText().toString().toLowerCase());
+            index.add(1);
         }
         if(!etYear.getText().toString().trim().equals("")){
             array.add(etYear.getText().toString());
+            index.add(2);
         }
         if(!etPlate.getText().toString().trim().equals("")){
-            array.add(etPlate.getText().toString());
+            array.add(etPlate.getText().toString().toLowerCase());
+            index.add(3);
         }
         if(!spinner.getSelectedItem().toString().equals("")){
-            array.add(spinner.getSelectedItem().toString().toLowerCase());
+            index.add(4);
+            String the_owner = spinner.getSelectedItem().toString();
+            int pos = 0;
+            for (int i = 0; i < the_owner.length(); i++) {
+                if (the_owner.charAt(i) == ' ') {
+                    pos = i;
+                    break;
+                }
+            }
+            String id_owner = the_owner.substring(0, pos);
+            array.add(id_owner);
         }
         Intent intent = new Intent(this, SearchRESULTS.class);
         intent.putExtra("url", "http://192.168.1.112:8080/cars/api");
         intent.putExtra("array", array);
+        intent.putExtra("index", index);
         startActivity(intent);
     }
 
@@ -130,7 +146,7 @@ public class MainActivitySEARCHCAR extends MainActivity {
                 valores[0] = "";
                 for (int i = 1; i < length+1; i++) {
                     JSONObject owner = jsonArray.getJSONObject(i-1);
-                    valores[i] = upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido"));
+                    valores[i] = owner.getString("id") + " - " + upperCaseAllFirst(owner.getString("nombre")) + " " + upperCaseAllFirst(owner.getString("apellido"));
                 }
                 spinner.setAdapter(new ArrayAdapter<String>(MainActivitySEARCHCAR.this, android.R.layout.simple_spinner_item, valores));
             } catch (JSONException e) {

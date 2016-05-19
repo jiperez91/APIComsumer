@@ -27,21 +27,27 @@ public class MainActivitySEARCHOWNER extends  MainActivity {
 
     public void onClick(View view) {
         ArrayList<String> array = new ArrayList<String>();
-        if(!etName.getText().toString().trim().equals("")){
+        ArrayList<Integer> index = new ArrayList<Integer>();
+        if (!etName.getText().toString().trim().equals("")) {
             array.add(etName.getText().toString().toLowerCase());
+            index.add(0);
         }
-        if(!etLastName.getText().toString().trim().equals("")){
+        if (!etLastName.getText().toString().trim().equals("")) {
             array.add(etLastName.getText().toString().toLowerCase());
+            index.add(1);
         }
-        if(!etDNI.getText().toString().trim().equals("")){
+        if (!etDNI.getText().toString().trim().equals("")) {
             array.add(etDNI.getText().toString());
+            index.add(2);
         }
-        if(!etNationality.getText().toString().trim().equals("")){
-            array.add(etNationality.getText().toString());
+        if (!etNationality.getText().toString().trim().equals("")) {
+            array.add(etNationality.getText().toString().toLowerCase());
+            index.add(3);
         }
         Intent intent = new Intent(this, SearchRESULTS.class);
         intent.putExtra("url", "http://192.168.1.112:8080/cars/apiOwner");
         intent.putExtra("array", array);
+        intent.putExtra("index", index);
         startActivity(intent);
     }
 }

@@ -101,10 +101,10 @@ public class SearchRESULTS extends  MainActivity {
             if(url.contains("Owner")){
                 try {
                     ArrayList<String> array = bundle.getStringArrayList("array");
+                    ArrayList<Integer> index = bundle.getIntegerArrayList("index");
                     final JSONArray jsonArray = new JSONArray(result);
                     JSONObject owner;
-                    int length = jsonArray.length();
-                    int length2 = array.size();
+                    int length = jsonArray.length(), length2;
                     final List<String> listContents = new ArrayList<String>();
                     ArrayList<String> owner_det = new ArrayList<String>(length);
                     final ArrayList<String> ids = new ArrayList<String>();
@@ -113,12 +113,21 @@ public class SearchRESULTS extends  MainActivity {
                         owner_det.clear();
                         contains = true;
                         owner = jsonArray.getJSONObject(i);
-                        owner_det.add(owner.getString("nombre").toLowerCase());
-                        owner_det.add(owner.getString("apellido").toLowerCase());
-                        owner_det.add(owner.getString("dni").toLowerCase());
-                        owner_det.add(owner.getString("nacionalidad").toLowerCase());
+                        if(index.contains(0)) {
+                            owner_det.add(owner.getString("nombre").toLowerCase());
+                        }
+                        if(index.contains(1)) {
+                            owner_det.add(owner.getString("apellido").toLowerCase());
+                        }
+                        if(index.contains(2)) {
+                            owner_det.add(owner.getString("dni"));
+                        }
+                        if(index.contains(3)) {
+                            owner_det.add(owner.getString("nacionalidad").toLowerCase());
+                        }
+                        length2 = owner_det.size();
                         for (int j = 0; j < length2; j++) {
-                            if(!owner_det.contains(array.get(j))){
+                            if(!owner_det.get(j).contains(array.get(j))){
                                 contains = false;
                                 break;
                             }
@@ -152,11 +161,11 @@ public class SearchRESULTS extends  MainActivity {
             else {
                 try {
                     ArrayList<String> array = bundle.getStringArrayList("array");
+                    ArrayList<Integer> index = bundle.getIntegerArrayList("index");
                     final JSONArray jsonArray = new JSONArray(result);
-                    JSONObject car, car2;
-                    String aux2;
-                    int length = jsonArray.length();
-                    int length2 = array.size();
+                    JSONObject car, the_owner;
+                    String aux, aux2;
+                    int length = jsonArray.length(), length2;
                     final List<String> listContents = new ArrayList<String>();
                     ArrayList<String> car_det = new ArrayList<String>(length);
                     final ArrayList<String> ids = new ArrayList<String>();
@@ -165,16 +174,35 @@ public class SearchRESULTS extends  MainActivity {
                         car_det.clear();
                         contains = true;
                         car = jsonArray.getJSONObject(i);
-                        String aux = car.getString("owner");
-                        car2 = new JSONObject(aux);
-                        aux2 = car2.getString("nombre") + " " + car2.getString("apellido");
-                        car_det.add(car.getString("make").toLowerCase());
-                        car_det.add(car.getString("model").toLowerCase());
-                        car_det.add(car.getString("year").toLowerCase());
-                        car_det.add(car.getString("plate").toLowerCase());
-                        car_det.add(aux2.toLowerCase());
+                        aux = car.getString("owner");
+                        the_owner = new JSONObject(aux);
+                        aux2 = the_owner.getString("id");
+                        if(index.contains(0)) {
+                            car_det.add(car.getString("make").toLowerCase());
+                        }
+                        if(index.contains(1)) {
+                            car_det.add(car.getString("model").toLowerCase());
+                        }
+                        if(index.contains(2)) {
+                            car_det.add(car.getString("year"));
+                        }
+                        if(index.contains(3)) {
+                            car_det.add(car.getString("plate").toLowerCase());
+                        }
+                        if(index.contains(4)) {
+                            car_det.add(aux2);
+                        }
+                        length2 = car_det.size();
                         for (int j = 0; j < length2; j++) {
-                            if(!car_det.contains(array.get(j))){
+                            if(index.contains(4)) {
+                                if (j==length2-1) {
+                                    if (!car_det.get(j).equals(array.get(j))) {
+                                        contains = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!car_det.get(j).contains(array.get(j))){
                                 contains = false;
                                 break;
                             }
