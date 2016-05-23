@@ -42,7 +42,7 @@ public class MainActivitySEARCHCAR extends MainActivity {
         btnSearch = (Button) findViewById(R.id.btnSearch);
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        new HttpAsyncGet().execute("http://192.168.1.112:8080/cars/apiOwner");
+        new HttpAsyncGet().execute("http://172.23.2.230:8080/cars/apiOwner");
     }
 
     public String upperCaseAllFirst(String value) {
@@ -90,7 +90,7 @@ public class MainActivitySEARCHCAR extends MainActivity {
             array.add(id_owner);
         }
         Intent intent = new Intent(this, SearchRESULTS.class);
-        intent.putExtra("url", "http://192.168.1.112:8080/cars/api");
+        intent.putExtra("url", "http://172.23.2.230:8080/cars/api");
         intent.putExtra("array", array);
         intent.putExtra("index", index);
         startActivity(intent);

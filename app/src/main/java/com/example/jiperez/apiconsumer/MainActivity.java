@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void getexe(View view) {
         String url, api = spinner.getSelectedItem().toString();
-        if (api.equals("Cars")) url = "http://192.168.1.112:8080/cars/api";
-        else url = "http://192.168.1.112:8080/cars/apiOwner";
+        if (api.equals("Cars")) url = "http://172.23.2.230:8080/cars/api";
+        else url = "http://172.23.2.230:8080/cars/apiOwner";
         Intent i = new Intent(this, MainActivityGET.class);
         i.putExtra("url", url);
         startActivity(i);
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void postexe(View view) {
         String url, api = spinner.getSelectedItem().toString();
-        if (api.equals("Cars")) url = "http://192.168.1.112:8080/cars/api";
-        else url = "http://192.168.1.112:8080/cars/apiOwner";
+        if (api.equals("Cars")) url = "http://172.23.2.230:8080/cars/api";
+        else url = "http://172.23.2.230:8080/cars/apiOwner";
         if(url.contains("Owner")){
             Intent i = new Intent(this, MainActivityPOSTOWNER.class);
             i.putExtra("url", url);
@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void searchexe(View view) {
         String url, api = spinner.getSelectedItem().toString();
-        if (api.equals("Cars")) url = "http://192.168.1.112:8080/cars/api";
-        else url = "http://192.168.1.112:8080/cars/apiOwner";
+        if (api.equals("Cars")) url = "http://172.23.2.230:8080/cars/api";
+        else url = "http://172.23.2.230:8080/cars/apiOwner";
         if(url.contains("Owner")){
             Intent i = new Intent(this, MainActivitySEARCHOWNER.class);
             i.putExtra("url", url);

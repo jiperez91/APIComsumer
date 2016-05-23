@@ -148,7 +148,7 @@ public class MainActivityPOSTOWNER extends MainActivity {
     }
 
     private boolean validate_nationality(String nationality) {
-        if (nationality.length() > 20 || !nationality.matches("[a-zA-Z ]+"))
+        if (nationality.length() > 20 || !nationality.matches("[a-záéíóúñüÁÉÍÓÚÑÜA-Z ]+"))
             return false;
         return true;
     }
@@ -225,7 +225,7 @@ public class MainActivityPOSTOWNER extends MainActivity {
                     }
                 }
                 if(flag)
-                    new HttpAsyncTask().execute("http://192.168.1.112:8080/cars/apiOwner");
+                    new HttpAsyncTask().execute("http://172.23.2.230:8080/cars/apiOwner");
                 else
                     Toast.makeText(getBaseContext(), "DNI is already in used and must be unique!", Toast.LENGTH_LONG).show();
             } catch (JSONException e) {

@@ -21,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -37,7 +39,7 @@ public class DetailsOWNER extends MainActivity {
 
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+        String url = "http://172.23.2.230:8080/cars/apiOwner/" + id;
         new HttpAsyncTask().execute(url);
     }
 
@@ -53,7 +55,7 @@ public class DetailsOWNER extends MainActivity {
         return new String(array);
     }
 
-    public static String GET(String url){
+    public static String GET(String url) {
         InputStream inputStream = null;
         String result = "";
         try {
@@ -67,7 +69,7 @@ public class DetailsOWNER extends MainActivity {
             inputStream = httpResponse.getEntity().getContent();
 
             // convert inputstream to string
-            if(inputStream != null)
+            if (inputStream != null)
                 result = convertInputStreamToString(inputStream);
             else
                 result = "Did not work!";
@@ -81,7 +83,7 @@ public class DetailsOWNER extends MainActivity {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         String result = "";
-        while((line = bufferedReader.readLine()) != null)
+        while ((line = bufferedReader.readLine()) != null)
             result += line;
         inputStream.close();
         return result;
@@ -100,7 +102,7 @@ public class DetailsOWNER extends MainActivity {
             try {
                 ownerObject = new JSONObject(result);
                 details.setText("Name: " + upperCaseAllFirst(ownerObject.getString("nombre")) + "\n" + "Last Name: " + upperCaseAllFirst(ownerObject.getString("apellido")) + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + upperCaseAllFirst(ownerObject.getString("nacionalidad")));
-                new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
+                new HttpCars2().execute("http://172.23.2.230:8080/cars/api");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -119,7 +121,7 @@ public class DetailsOWNER extends MainActivity {
             try {
                 JSONArray jsonArray = new JSONArray(result);
                 JSONObject jsonObject, jsonObject2;
-                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                String aux, owndet = ownerObject.getString("id");
                 int tam = jsonArray.length();
                 String owners[] = new String[tam];
                 int count = 0;
@@ -127,7 +129,7 @@ public class DetailsOWNER extends MainActivity {
                     jsonObject = jsonArray.getJSONObject(i);
                     aux = jsonObject.getString("owner");
                     jsonObject2 = new JSONObject(aux);
-                    owners[i] = jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido");
+                    owners[i] = jsonObject2.getString("id");
                     if (owners[i].equals(owndet)) {
                         count++;
                         break;
@@ -136,12 +138,11 @@ public class DetailsOWNER extends MainActivity {
                 if (count == 0) {
                     Bundle bundle = getIntent().getExtras();
                     String id = bundle.getString("id");
-                    String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+                    String url = "http://172.23.2.230:8080/cars/apiOwner/" + id;
                     Intent i = new Intent(DetailsOWNER.this, MainActivityDELETE.class);
                     i.putExtra("url", url);
                     startActivity(i);
-                }
-                else {
+                } else {
                     Toast.makeText(getBaseContext(), "Owner is in use, cannot be deleted!", Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
@@ -162,7 +163,7 @@ public class DetailsOWNER extends MainActivity {
             try {
                 JSONArray jsonArray = new JSONArray(result);
                 JSONObject jsonObject, jsonObject2;
-                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                String aux, owndet = ownerObject.getString("id");
                 ArrayList<String> cars = new ArrayList<String>();
                 String owner_cars = "";
                 int tam = jsonArray.length();
@@ -170,19 +171,18 @@ public class DetailsOWNER extends MainActivity {
                     jsonObject = jsonArray.getJSONObject(i);
                     aux = jsonObject.getString("owner");
                     jsonObject2 = new JSONObject(aux);
-                    if(owndet.equals(jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido"))){
+                    if (owndet.equals(jsonObject2.getString("id"))) {
                         cars.add(upperCaseAllFirst(jsonObject.getString("make")) + " " + upperCaseAllFirst(jsonObject.getString("model")));
                     }
                 }
                 int tam2 = cars.size();
-                if(tam2 != 0) {
+                if (tam2 != 0) {
                     if (tam2 == 1) {
                         owner_cars = cars.get(0);
                         details.append("\nCar: " + owner_cars);
-                    }
-                    else {
+                    } else {
                         for (int i = 0; i < tam2; i++) {
-                            if (i != tam2-1) owner_cars += cars.get(i) + ", ";
+                            if (i != tam2 - 1) owner_cars += cars.get(i) + ", ";
                             else owner_cars += cars.get(i);
                         }
                         details.append("\nCars: " + owner_cars);
@@ -195,13 +195,13 @@ public class DetailsOWNER extends MainActivity {
     }
 
     public void deleteexe(View view) {
-        new HttpCars().execute("http://192.168.1.112:8080/cars/api");
+        new HttpCars().execute("http://172.23.2.230:8080/cars/api");
     }
 
     public void putexe(View view) {
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/apiOwner/" + id;
+        String url = "http://172.23.2.230:8080/cars/apiOwner/" + id;
         Intent i = new Intent(this, MainActivityPUTOWNER.class);
         i.putExtra("url", url);
         startActivity(i);

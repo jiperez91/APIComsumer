@@ -32,7 +32,7 @@ public class DetailsCAR extends MainActivity {
 
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        String url = "http://172.23.2.230:8080/cars/api/" + id;
         new HttpAsyncTask().execute(url);
     }
 
@@ -107,7 +107,7 @@ public class DetailsCAR extends MainActivity {
     public void deleteexe(View view) {
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        String url = "http://172.23.2.230:8080/cars/api/" + id;
         Intent i = new Intent(this, MainActivityDELETE.class);
         i.putExtra("url", url);
         startActivity(i);
@@ -116,7 +116,7 @@ public class DetailsCAR extends MainActivity {
     public void putexe(View view) {
         Bundle bundle = getIntent().getExtras();
         String id = bundle.getString("id");
-        String url = "http://192.168.1.112:8080/cars/api/" + id;
+        String url = "http://172.23.2.230:8080/cars/api/" + id;
         Intent i = new Intent(this, MainActivityPUTCAR.class);
         i.putExtra("url", url);
         startActivity(i);

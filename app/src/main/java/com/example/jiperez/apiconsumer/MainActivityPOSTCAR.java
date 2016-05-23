@@ -49,7 +49,7 @@ public class MainActivityPOSTCAR extends MainActivity {
         btnPost = (Button) findViewById(R.id.btnPost);
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        new HttpAsyncGet().execute("http://192.168.1.112:8080/cars/apiOwner");
+        new HttpAsyncGet().execute("http://172.23.2.230:8080/cars/apiOwner");
     }
 
     public String upperCaseAllFirst(String value) {
@@ -279,7 +279,7 @@ public class MainActivityPOSTCAR extends MainActivity {
                     }
                 }
                 if(flag)
-                    new HttpAsyncTask().execute("http://192.168.1.112:8080/cars/api");
+                    new HttpAsyncTask().execute("http://172.23.2.230:8080/cars/api");
                 else
                     Toast.makeText(getBaseContext(), "Plate is already in used and must be unique!", Toast.LENGTH_LONG).show();
             } catch (JSONException e) {

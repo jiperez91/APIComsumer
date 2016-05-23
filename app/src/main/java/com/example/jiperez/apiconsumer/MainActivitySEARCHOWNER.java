@@ -45,7 +45,7 @@ public class MainActivitySEARCHOWNER extends  MainActivity {
             index.add(3);
         }
         Intent intent = new Intent(this, SearchRESULTS.class);
-        intent.putExtra("url", "http://192.168.1.112:8080/cars/apiOwner");
+        intent.putExtra("url", "http://172.23.2.230:8080/cars/apiOwner");
         intent.putExtra("array", array);
         intent.putExtra("index", index);
         startActivity(intent);

@@ -140,7 +140,7 @@ public class MainActivityPUTOWNER extends MainActivity {
         else if (!validate_changes())
             Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
         else {
-            new ValidateUniqueDNI().execute("http://192.168.1.112:8080/cars/apiOwner");
+            new ValidateUniqueDNI().execute("http://172.23.2.230:8080/cars/apiOwner");
         }
     }
 
@@ -247,7 +247,7 @@ public class MainActivityPUTOWNER extends MainActivity {
             try {
                 ownerObject = new JSONObject(result);
                 tvJson.setText("Name: " + upperCaseAllFirst(ownerObject.getString("nombre")) + "\n" + "Last Name: " + upperCaseAllFirst(ownerObject.getString("apellido")) + "\n" + "DNI: " + ownerObject.getString("dni") + "\n" + "Nationality: " + upperCaseAllFirst(ownerObject.getString("nacionalidad")));
-                new HttpCars2().execute("http://192.168.1.112:8080/cars/api");
+                new HttpCars2().execute("http://172.23.2.230:8080/cars/api");
                 etName.setText(upperCaseAllFirst(ownerObject.getString("nombre")));
                 etLastName.setText(upperCaseAllFirst(ownerObject.getString("apellido")));
                 etDNI.setText(ownerObject.getString("dni"));
@@ -270,7 +270,7 @@ public class MainActivityPUTOWNER extends MainActivity {
             try {
                 JSONArray jsonArray = new JSONArray(result);
                 JSONObject jsonObject, jsonObject2;
-                String aux, owndet = ownerObject.getString("nombre") + " " + ownerObject.getString("apellido");
+                String aux, owndet = ownerObject.getString("id");
                 ArrayList<String> cars = new ArrayList<String>();
                 String owner_cars = "";
                 int tam = jsonArray.length();
@@ -278,7 +278,7 @@ public class MainActivityPUTOWNER extends MainActivity {
                     jsonObject = jsonArray.getJSONObject(i);
                     aux = jsonObject.getString("owner");
                     jsonObject2 = new JSONObject(aux);
-                    if(owndet.equals(jsonObject2.getString("nombre") + " " + jsonObject2.getString("apellido"))){
+                    if(owndet.equals(jsonObject2.getString("id"))){
                         cars.add(jsonObject.getString("make") + " " + jsonObject.getString("model"));
                     }
                 }

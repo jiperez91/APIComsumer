@@ -55,7 +55,7 @@ public class MainActivityPUTCAR extends MainActivity {
         String url = bundle.getString("url");
 
         new RetrieveSiteData().execute(url);
-        new RetrieveSiteData2().execute("http://192.168.1.112:8080/cars/apiOwner");
+        new RetrieveSiteData2().execute("http://172.23.2.230:8080/cars/apiOwner");
     }
 
     public String upperCaseAllFirst(String value) {
@@ -171,7 +171,7 @@ public class MainActivityPUTCAR extends MainActivity {
         else if (!validate_changes())
             Toast.makeText(getBaseContext(), "No changes were made!", Toast.LENGTH_LONG).show();
         else {
-            new ValidateUniquePlate().execute("http://192.168.1.112:8080/cars/api");
+            new ValidateUniquePlate().execute("http://172.23.2.230:8080/cars/api");
         }
     }
 
@@ -231,7 +231,8 @@ public class MainActivityPUTCAR extends MainActivity {
                 String aux = jsonObject.getString("owner");
                 JSONObject jsonObject2 = new JSONObject(aux);
                 aux2 = jsonObject2.getString("dni");
-                tvJson.setText("Make: " + upperCaseAllFirst(jsonObject.getString("make")) + "\n" + "Model: " + upperCaseAllFirst(jsonObject.getString("model")) + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + aux2);
+                String nom_ape = upperCaseAllFirst(jsonObject2.getString("nombre")) + " " + upperCaseAllFirst(jsonObject2.getString("apellido"));
+                tvJson.setText("Make: " + upperCaseAllFirst(jsonObject.getString("make")) + "\n" + "Model: " + upperCaseAllFirst(jsonObject.getString("model")) + "\n" + "Year: " + jsonObject.getString("year") + "\n" + "Plate: " + jsonObject.getString("plate") + "\n" + "Owner: " + nom_ape);
                 etMake.setText(upperCaseAllFirst(jsonObject.getString("make")));
                 etModel.setText(upperCaseAllFirst(jsonObject.getString("model")));
                 etYear.setText(jsonObject.getString("year"));

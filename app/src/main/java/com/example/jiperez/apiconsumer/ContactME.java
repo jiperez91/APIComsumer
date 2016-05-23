@@ -25,6 +25,25 @@ public class ContactME extends MainActivity {
         btnSend = (Button) findViewById(R.id.btnSend);
     }
 
+    public String upperCaseAllFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        for (int i = 1; i < array.length; i++) {
+            if (Character.isWhitespace(array[i - 1])) {
+                array[i] = Character.toUpperCase(array[i]);
+            }
+        }
+        return new String(array);
+    }
+
+    public String upperCaseFirst(String value) {
+        value = value.toLowerCase();
+        char[] array = value.toCharArray();
+        array[0] = Character.toUpperCase(array[0]);
+        return new String(array);
+    }
+
     public void onClick(View view) {
         if(!validate())
             Toast.makeText(getBaseContext(), "Please enter all fields!", Toast.LENGTH_LONG).show();
@@ -32,7 +51,7 @@ public class ContactME extends MainActivity {
             Intent itSend = new Intent(Intent.ACTION_SEND);
             itSend.putExtra(Intent.EXTRA_SUBJECT, "APIConsumer Message");
             itSend.putExtra(Intent.EXTRA_EMAIL, new String[]{"juanignacioperez91@gmail.com"});
-            itSend.putExtra(Intent.EXTRA_TEXT, "Hi! I'm " + etNameContact.getText().toString() + ":" + "\n" + "\n" + etMessage.getText().toString());
+            itSend.putExtra(Intent.EXTRA_TEXT, "Hi! I'm " + upperCaseAllFirst(etNameContact.getText().toString()) + ":" + "\n" + "\n" + upperCaseFirst(etMessage.getText().toString()));
             itSend.setType("message/rfc822");
             try {
                 startActivity(Intent.createChooser(itSend, "Send message using..."));
