@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/tvMake"
@@ -81,13 +81,13 @@
 
         <TextView
             android:id="@+id/tvOwner"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tvPlate"
+            android:layout_alignBaseline="@+id/spinner"
             android:text="Owner:"
             android:textStyle="bold"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="25dp" />
+            android:layout_marginLeft="5dp" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -95,29 +95,27 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/etPlate"
             android:layout_alignLeft="@+id/etPlate"
-            android:layout_alignBaseline="@+id/tvOwner"
             android:layout_alignStart="@+id/etPlate"
             android:focusable="false"
-            android:popupBackground="#9b8c8c" />
+            android:popupBackground="#9b8c8c"
+            android:layout_marginTop="10dp" />
 
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:text="@string/SAVE"
+            android:clickable="true"
+            android:onClick="onClick"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/btnPost"
+            android:id="@+id/imageView2"
+            android:src="@drawable/car" />
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/btnPost"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/SAVE"
-        android:clickable="true"
-        android:onClick="onClick"
-        android:layout_marginTop="15dp" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView2"
-        android:layout_gravity="right"
-        android:src="@drawable/car"
-        android:layout_marginTop="-10dp" />
-
 </LinearLayout>
