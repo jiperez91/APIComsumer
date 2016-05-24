@@ -66,7 +66,6 @@ public class ContactME extends MainActivity {
             return false;
         else if(etMessage.getText().toString().trim().equals(""))
             return false;
-        else
-            return true;
+        return true;
     }
 }

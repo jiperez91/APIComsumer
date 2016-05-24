@@ -30,7 +30,7 @@
         <Button
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="DELETE"
+            android:text="@string/DELETE"
             android:id="@+id/buttondelete"
             android:onClick="deleteexe"
             android:layout_gravity="left"
@@ -40,7 +40,7 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/buttondelete"
-            android:text="EDIT"
+            android:text="@string/PUT"
             android:id="@+id/buttonput"
             android:onClick="putexe"
             android:layout_marginRight="20dp"

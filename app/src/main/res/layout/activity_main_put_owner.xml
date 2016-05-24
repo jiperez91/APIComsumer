@@ -104,10 +104,10 @@
 
     <Button
         android:id="@+id/btnPost"
-        android:layout_width="200dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/PUT_OWNER"
+        android:text="@string/PUT"
         android:clickable="true"
         android:onClick="onClick"
         android:layout_below="@+id/etNationality"

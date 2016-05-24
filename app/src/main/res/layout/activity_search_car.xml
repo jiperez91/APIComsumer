@@ -105,7 +105,7 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinner"
-            android:text="@string/SEARCH_CAR"
+            android:text="@string/SEARCH"
             android:clickable="true"
             android:onClick="onClick"
             android:layout_centerHorizontal="true"
